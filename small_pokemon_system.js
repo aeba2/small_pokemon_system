@@ -19,6 +19,24 @@ const create_indivisual_stats = () => {
     return {hp:arr[0], atk:arr[1], def:arr[2], sp_atk:arr[3], sp_def:arr[4], speed:arr[5]};
 }
 
+//クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
+class PokeBox{
+  constructor(){
+    this.contents = [];
+  }
+
+  download(){//ボックスにいるポケモンのデータをダウンロード(jsonファイル)
+    const data = this.contents;
+    const blob =  new Blob([JSON.stringify(data)], {type: 'application\/json'})
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `PokeBox.json`;
+    link.click();
+  }
+}
+
+//const my_PokeBox = new PokeBox();
+
 //クラスPokemon:不要？
 class Pokemon{//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
   constructor(){
@@ -204,8 +222,11 @@ const encount_list_CeladonDepartmentStore = {
   //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
     Mew:{encount_rate:"event",level:[3,67]}// "event"はイベント戦。
 }
+
+
 //クラスEncount:ポケモンのエンカウントに関するクラス。インスタンス生成時にマップのエンカウント情報リストのオブジェクトを引数に指定。
 //マップを移動するたびにインスタンスを生成。
+/*
 class Encount{
   constructor(_encount_list){
     if(!_encount_list) {
@@ -251,41 +272,73 @@ class Encount{
     link.href = URL.createObjectURL(blob);
     link.download = `${pokemon_caught.name}.json`;
     link.click();
-*/
+
 
     console.log(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
   }
+
 }
 
-
+*/
 
 
 
 
 /*                      包括的                              */
-//クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
-class PokeBox{
-  constructor(){
-    this.contents = [];
-  }
 
-  download(){//ボックスにいるポケモンのデータをダウンロード(jsonファイル)
-    const data = this.contents;
-    const blob =  new Blob([JSON.stringify(data)], {type: 'application\/json'})
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `PokeBox.json`;
-    link.click();
-  }
-}
-
-//const my_PokeBox = new PokeBox();
-
+//Playクラス
 class Play{
   constructor(){
-    this.myPokeBox = new PokeBox();
+    this.pokebox = new PokeBox();
+    this.encount_list = encount_list_tokiwa;//エンカウントリストオブジェクト.初期値はトキワの森のencount_list_tokiwa。
+    this.current_pokemon;//最後に出現したポケモンのインスタンス
+
+    console.log(`ゲームスタート！`);
+    console.log(`ここは`);
   }
+
+  //encountメソッド:乱数を生成し、ランダムにポケモンを出現させる
+  encount(){
+    const rand = Math.random();//0~1の乱数を生成
+    let newAcc = 0,oldAcc = 0;
+    let flg_no_encount = true;//出現フラグ(エラーハンドリング用): true:ポケモンが出現しない、false:ポケモンが出現する
+
+    //出た乱数(rand)に相当するエンカウントリストのメンバー(出現するポケモン)を選び出すためのfor文。
+    for(let member of Object.keys(this.encount_list)){
+      const tmp = this.encount_list[member];
+      newAcc += tmp.encount_rate;
+
+      if(rand >= oldAcc && rand < newAcc){
+        this.current_pokemon = new tmp.class();//出現するポケモンのインスタンスを生成
+        console.log(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
+        flg_no_encount = false;
+        break;
+      }
+      oldAcc = newAcc;
+    }
+    if(flg_no_encount) console.log(`何も現れなかった`);
+    return;
+  }
+
+  catch(){
+    const pokemon_caught = this.current_pokemon;
+
+    //プレイヤーのポケモンボックスにポケモンを収納
+    this.pokebox.contents.push(pokemon_caught);
+
+ //捕まえたポケモンのオブジェクトをjsonファイルにしてダウンロード
+    const blob =  new Blob([JSON.stringify(pokemon_caught)], {type: 'application\/json'})
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${pokemon_caught.name}.json`;
+    link.click();
+
+
+    console.log(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
+  }
+
 }
+
 
 
 
@@ -294,12 +347,6 @@ class Play{
 /*                       ゲームスタート                      */
 
 const myPlay = new Play();
-console.log(`ゲームスタート`);
-
-const tokiwa = new Encount(encount_list_tokiwa);
-console.log(`ここはトキワの森`);
-
-
 
 
 
