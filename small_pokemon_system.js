@@ -205,9 +205,30 @@ class Shuckle extends Pokemon{
 }
 
 
+/*                      場所                                 */
+//場所クラス
+
 
 /*                     エンカウント関連                      */
-/*エンカウントデータ*/
+/*エンカウントデータリスト*/
+const encount_list_set = {
+  tokiwanomori:{
+    //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
+      Pikachu:{class:Pikachu,encount_rate:0.04,level:[3,5]},
+      Caterpie:{class:Caterpie,encount_rate:0.3,level:[3,4,5]},
+      Metapod:{class:Metapod,encount_rate:0.18,level:[4,5,6]},
+      Weedle:{class:Weedle,encount_rate:0.3,level:[3,4,5]},
+      Kakuna:{class:Kakuna,encount_rate:0.18,level:[4,5,6]}
+  },
+  CeladonDepartmentStore:{
+    Mew:{class:Mew,encount_rate:1,level:[3,67]}// "event"はイベント戦。
+  },
+  hoge:{
+    Shuckle:{class:Shuckle,encount_rate:1,level:[4,5,6]}// "event"はイベント戦。
+  }
+}
+
+/*
 //encount_list_tokiwaオブジェクト: トキワの森のポケモン出現情報(Viridian Forest encount) [Pikachu,Caterpie,Metapod,Weedle,Kakuna]
 const encount_list_tokiwa = {
   //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
@@ -222,7 +243,7 @@ const encount_list_CeladonDepartmentStore = {
   //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
     Mew:{encount_rate:"event",level:[3,67]}// "event"はイベント戦。
 }
-
+*/
 
 //クラスEncount:ポケモンのエンカウントに関するクラス。インスタンス生成時にマップのエンカウント情報リストのオブジェクトを引数に指定。
 //マップを移動するたびにインスタンスを生成。
@@ -290,15 +311,26 @@ class Encount{
 class Play{
   constructor(){
     this.pokebox = new PokeBox();
-    this.encount_list = encount_list_tokiwa;//エンカウントリストオブジェクト.初期値はトキワの森のencount_list_tokiwa。
-    this.current_pokemon;//最後に出現したポケモンのインスタンス
+
+    this.current_place = Object.keys(encount_list_set)[0];//現在の場所の名前.初期値はトキワの森:"tokiwanomori"
+    this.encount_list = encount_list_set[this.current_place];//エンカウントリストオブジェクト.初期値はトキワの森のencount_list_tokiwa。
+
+    this.isOnBattle = false;//いまバトル中か
+    this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
+    this.previous_pokemon = undefined;//前回出現したポケモン
 
     console.log(`ゲームスタート！`);
-    console.log(`ここは`);
+    console.log(`ここは${this.current_place}`);
+
+    return;
   }
 
   //encountメソッド:乱数を生成し、ランダムにポケモンを出現させる
   encount(){
+    if(this.isOnBattle){
+      throw new Error(`戦闘中です。まずは目の前のポケモンに集中して、捕まえるなり逃げるなりしてください(一度に一匹しか出ません)`);
+    }
+
     const rand = Math.random();//0~1の乱数を生成
     let newAcc = 0,oldAcc = 0;
     let flg_no_encount = true;//出現フラグ(エラーハンドリング用): true:ポケモンが出現しない、false:ポケモンが出現する
@@ -311,8 +343,9 @@ class Play{
       if(rand >= oldAcc && rand < newAcc){
         this.current_pokemon = new tmp.class();//出現するポケモンのインスタンスを生成
         console.log(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
+        this.isOnBattle = true;
         flg_no_encount = false;
-        break;
+        return;
       }
       oldAcc = newAcc;
     }
@@ -321,6 +354,10 @@ class Play{
   }
 
   catch(){
+    if(!this.isOnBattle){
+      throw new Error(`いや、ポケモン居らんし…`);
+    }
+
     const pokemon_caught = this.current_pokemon;
 
     //プレイヤーのポケモンボックスにポケモンを収納
@@ -335,6 +372,55 @@ class Play{
 
 
     console.log(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
+
+    this.isOnBattle = false;
+    this.previous_pokemon = this.current_pokemon;
+    this.current_pokemon = undefined;//クリア
+
+    return;
+  }
+
+  run(){
+    if(!this.isOnBattle){
+      throw new Error(`いや、ポケモン居らんし…`);
+    }
+    this.isOnBattle = false;
+    this.previous_pokemon = this.current_pokemon;
+    this.current_pokemon = undefined;//クリア
+    console.log(`上手く逃げ切れた！`);
+
+    return;
+  }
+
+  move(){
+    if(this.isOnBattle){
+      throw new Error(`戦闘中です。捕まえるなり逃げるなりしてください。`);
+    }
+
+    const places = Object.keys(encount_list_set);//名前リスト
+    /*
+    console.log(`moveに入った`);
+    console.log(`places:${places}`);
+    console.log(`places[0]:${places[0]},places[1]:${places[1]}`);
+    console.log(`tokiwaでforは止まるはず`);
+    */
+    for(let key of Object.keys(places)){
+      let i = Number(key);
+      //console.log(`places[${i}]:${places[i]}`);
+      if(places[i] === this.current_place){
+        /*
+        console.log(`ifの中に入った`);
+        console.log(`i=${i}でi+1は${i+1},places[i+1]は${places[i+1]}`);
+        console.log(`places[0]は${places[0]}`);
+        */
+        this.current_place =(places[i+1]) ? places[i+1]:places[0];
+        this.encount_list = encount_list_set[this.current_place];
+        console.log(`ここは${this.current_place}`);
+
+        return;
+      }
+    }
+
   }
 
 }
@@ -349,7 +435,7 @@ class Play{
 const myPlay = new Play();
 
 
-
+/*        デバッグエリア         */
 
 
 /*草稿
