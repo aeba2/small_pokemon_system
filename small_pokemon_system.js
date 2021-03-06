@@ -20,6 +20,7 @@ const create_indivisual_stats = () => {
 }
 
 //クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
+//セーブデータからロード機能も付けたい(Playの方か)
 class PokeBox{
   constructor(){
     this.contents = [];
@@ -323,6 +324,25 @@ class Play{
     console.log(`ここは${this.current_place}`);
 
     return;
+  }
+
+  //ポケモンボックスのデータをロード(引数はシングルクオーテーション''で囲まなければならない)
+  load_pokebox(_pokeboxData){
+      if(!_pokeboxData){
+        throw new Error(`引数にポケモンボックスのセーブデータをセットしてください`);
+      }
+
+      this.pokebox.contents = JSON.parse(_pokeboxData);
+    //  const str = `'${_pokeboxData}'`;
+    //  this.pokebox.contents = JSON.parse(str);
+
+      /*おそらく没
+      this.pokebox.contents = [];//初期化
+      for(let x of _pokeboxData){
+        const str = `${x}`;
+        this.pokebox.contents.push(JSON.parse(x));
+      }
+      */
   }
 
   //encountメソッド:乱数を生成し、ランダムにポケモンを出現させる
