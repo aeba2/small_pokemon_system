@@ -2,7 +2,23 @@
 /*Twitterでポケモン出現botを作りたい。「キャッチ」とリプすると捕まえる事が出来る。
 捕まえると、捕まえたポケモンのjsonファイルを生成し、ダウンロード出来る*/
 
-/*ポケモンそのもの*/
+
+/*                     ポケモン関連                             */
+
+//個体値をランダムに生成する関数
+const create_indivisual_stats = () => {
+    let arr = [];
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    }
+    for(let i = 0;i<6;i++){
+      arr.push(getRandomInt(0,31));
+    }
+    return {hp:arr[0], atk:arr[1], def:arr[2], sp_atk:arr[3], sp_def:arr[4], speed:arr[5]};
+}
+
 //クラスPokemon:不要？
 class Pokemon{//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
   constructor(){
@@ -170,22 +186,24 @@ class Shuckle extends Pokemon{
   }
 }
 
-//個体値をランダムに生成する関数
-const create_indivisual_stats = () => {
-    let arr = [];
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-    }
-    for(let i = 0;i<6;i++){
-      arr.push(getRandomInt(0,31));
-    }
-    return {hp:arr[0], atk:arr[1], def:arr[2], sp_atk:arr[3], sp_def:arr[4], speed:arr[5]};
+
+
+/*                     エンカウント関連                      */
+/*エンカウントデータ*/
+//encount_list_tokiwaオブジェクト: トキワの森のポケモン出現情報(Viridian Forest encount) [Pikachu,Caterpie,Metapod,Weedle,Kakuna]
+const encount_list_tokiwa = {
+  //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
+    Pikachu:{class:Pikachu,encount_rate:0.04,level:[3,5]},
+    Caterpie:{class:Caterpie,encount_rate:0.3,level:[3,4,5]},
+    Metapod:{class:Metapod,encount_rate:0.18,level:[4,5,6]},
+    Weedle:{class:Weedle,encount_rate:0.3,level:[3,4,5]},
+    Kakuna:{class:Kakuna,encount_rate:0.18,level:[4,5,6]}
 }
-
-
-/*エンカウント関連*/
+//encount_list_CeladonDepartmentStoreオブジェクト: タマムシデパートのポケモン出現情報
+const encount_list_CeladonDepartmentStore = {
+  //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
+    Mew:{encount_rate:"event",level:[3,67]}// "event"はイベント戦。
+}
 //クラスEncount:ポケモンのエンカウントに関するクラス。インスタンス生成時にマップのエンカウント情報リストのオブジェクトを引数に指定。
 //マップを移動するたびにインスタンスを生成。
 class Encount{
@@ -225,7 +243,7 @@ class Encount{
     const pokemon_caught = this.current_pokemon;
 
     //プレイヤーのポケモンボックスにポケモンを収納
-    myPlayData.myPokeBox.contents.push(pokemon_caught);
+    myPlay.myPokeBox.contents.push(pokemon_caught);
 
 /* //捕まえたポケモンのオブジェクトをjsonファイルにしてダウンロード
     const blob =  new Blob([JSON.stringify(pokemon_caught)], {type: 'application\/json'})
@@ -238,30 +256,13 @@ class Encount{
     console.log(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
   }
 }
-//encount_list_tokiwaオブジェクト: トキワの森のポケモン出現情報(Viridian Forest encount) [Pikachu,Caterpie,Metapod,Weedle,Kakuna]
-const encount_list_tokiwa = {
-  //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
-    Pikachu:{class:Pikachu,encount_rate:0.04,level:[3,5]},
-    Caterpie:{class:Caterpie,encount_rate:0.3,level:[3,4,5]},
-    Metapod:{class:Metapod,encount_rate:0.18,level:[4,5,6]},
-    Weedle:{class:Weedle,encount_rate:0.3,level:[3,4,5]},
-    Kakuna:{class:Kakuna,encount_rate:0.18,level:[4,5,6]}
-}
-//encount_list_CeladonDepartmentStoreオブジェクト: タマムシデパートのポケモン出現情報
-const encount_list_CeladonDepartmentStore = {
-  //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
-    Mew:{encount_rate:"event",level:[3,67]}// "event"はイベント戦。
-}
 
-/*捕まえ関連*/
-//クラス Catch:捕まえる
-/*
-class Catch{
-  throw_ball(){
-  }
-}
-*/
 
+
+
+
+
+/*                      包括的                              */
 //クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
 class PokeBox{
   constructor(){
@@ -289,34 +290,14 @@ class Play{
 
 
 
-/*
 
-実験広場
+/*                       ゲームスタート                      */
 
-
-*/
-
-
-/*ゲームスタート*/
-
-const myPlayData = new Play();
+const myPlay = new Play();
 console.log(`ゲームスタート`);
 
 const tokiwa = new Encount(encount_list_tokiwa);
 console.log(`ここはトキワの森`);
-
-
-
-
-
-
-//実験:ピカチュウのインスタンス作成
-//const pika = new Pikachu();
-//実験:トキワの森のエンカウントオブジェクト(class Encountのインスタンス)
-/*
-const encount_tokiwa = new Encount(encount_list_tokiwa);
-encount_tokiwa.encount();
-*/
 
 
 
