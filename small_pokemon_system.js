@@ -34,17 +34,66 @@ class PokeBox{
     this.contents = [];
   }
 
-  download(){//ボックスにいるポケモンのデータをダウンロード(jsonファイル)
-    const data = this.contents;
-    const blob =  new Blob([JSON.stringify(data)], {type: 'application\/json'})
+  save(){//ボックスにいるポケモンのデータをダウンロード(jsonファイル)
+    const data = JSON.stringify(this.contents);
+    // 利用例
+    if (storageAvailable('localStorage')) {
+      localStorage.setItem("pokebox",data);
+      //本当はここにもう一つ、ちゃんとセーブできたか確認する判定を入れたい。
+      console.log(`ボックスデータのセーブが完了しました。`);
+
+    } else {
+      console.log(`残念ながら、データをセーブ出来ません。`);
+      console.log(`何らかの理由で、データのセーブに必要なlocalStorageが使用できません。
+                  以下を試してみてください。
+                  ・ブラウザをシークレットモードで見ている場合は通常モードに切り替える
+                  ・別のブラウザを使う
+
+                  `);
+        // 残念ながら localStorage は使用できません
+    }
+
+
+    /*
+    const blob =  new Blob([data], {type: 'application\/json'})
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `PokeBox.json`;
     link.click();
+    */
+  }
+
+  load(){
+    const data = localStorage.getItem("pokebox");
+    this.contents = JSON.parse(data);
   }
 }
 
-//const my_PokeBox = new PokeBox();
+//データのセーブに必要なlocalstorageをサポートしているか判定する関数
+function storageAvailable(type) {
+    try {
+        var storage = window[type],
+            x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    } catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            storage.length !== 0;
+    }
+}
+
+
 
 //クラスPokemon:不要？
 class Pokemon{//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
@@ -268,29 +317,15 @@ class Play{
       rankaku(2以上の数値): ()の中に入力された数値の数だけポケモンを乱獲できます。
       move(): 場所を移動する
       box(): ポケモンボックスを見る(捕まえたポケモンを見れます)
-      download(): ポケモンボックスの中身(捕まえたポケモン)のデータのJSONファイルで保存できます
-      load(ボックスのデータのJSON): ボックスのセーブデータをロードする。download()で保存したボックスデータのJSONファイルの中身のテキストをそのままコピペしてください。
+      save(): ポケモンボックスの中身(捕まえたポケモン)のデータのJSONファイルで保存できます
+      load(): ボックスのセーブデータをロードする。
       help(): ヘルプを表示
       `)
   }
 
-  //ポケモンボックスのデータをロード(引数はシングルクオーテーション''で囲まなければならない)
-  load_pokebox(_pokeboxData){
-      if(!_pokeboxData){
-        throw new Error(`引数にポケモンボックスのセーブデータをセットしてください`);
-      }
-
-      this.pokebox.contents = JSON.parse(_pokeboxData);
-    //  const str = `'${_pokeboxData}'`;
-    //  this.pokebox.contents = JSON.parse(str);
-
-      /*おそらく没
-      this.pokebox.contents = [];//初期化
-      for(let x of _pokeboxData){
-        const str = `${x}`;
-        this.pokebox.contents.push(JSON.parse(x));
-      }
-      */
+  //ポケモンボックスのデータをロード
+  load_pokebox(){
+        this.pokebox.load();
   }
 
   //encountメソッド:乱数を生成し、ランダムにポケモンを出現させる
@@ -411,13 +446,13 @@ const move = () =>{
   myPlay.move();
 }
 const load = (_data) =>{
-  myPlay.load_pokebox(_data);
+  myPlay.load_pokebox();
 }
-const download = () =>{
-  myPlay.pokebox.download();
+const save = () =>{
+  myPlay.pokebox.save();
 }
 const box = () =>{
-  myPlay.pokebox.contents;
+  console.log(myPlay.pokebox.contents);
 }
 const help = () => {
   myPlay.help();
