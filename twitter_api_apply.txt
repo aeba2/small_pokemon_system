@@ -1,0 +1,40 @@
+
+/*草稿
+Q1.
+In your words In English, please describe how you plan to use Twitter data and/or APIs. The more detailed the response, the easier it is to review and approve.
+A1.
+I'm requesting Twitter Developer Account for exhibiting a game product I'm developing.
+By using Twitter API’s tweet function, I’ll create a Twitter bot which provides the Twitter users with a kind of a text-based game.
+I'm planning to make this game bot have the function to respond to the reply which the player gives to it, and I need the functions of Twitter API to acheive this.
+The main goal for this game bot is to provide the users with entertainment.
+
+Q2.
+Are you planning to analyze Twitter data?
+Please describe how you will analyze Twitter data including any analysis of Tweets or Twitter users.
+
+A2.
+Yes, I’m planning to use Twitter data for analysis.
+Since this game bot progresses by responding to the reply from the users, analyzing Twitter data is a necessity.
+
+Q3.
+Will your app use Tweet, Retweet, like, follow, or Direct Message functionality?
+Please describe your planned use of these features.
+
+A3.
+Yes, I’m planning to use Tweet functionality for the Twitter bot.
+As I described above, the concept of the bot I'm going to make is text-based game.
+Tweet functionality is needed to realize it.
+
+Q4.
+Do you plan to display Tweets or aggregate data about Twitter content outside of Twitter?
+Please describe how and where Tweets and/or data about Twitter content will be displayed outside of Twitter.
+
+A4.
+No.
+Q5.
+Will your product, service or analysis make Twitter content or derived information available to a government entity?
+
+A5.
+No
+
+*/

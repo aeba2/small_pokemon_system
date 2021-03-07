@@ -6,6 +6,8 @@
 とりあえず、Chrome devtools 上で快適にプレイ出来るものを作って、
 あとからフォークしてHTML上で操作できるものも作ってみたい。
 
+今後は戦闘システムなども。
+
 */
 
 
@@ -247,18 +249,7 @@ class Play{
 
     console.log(`ゲームスタート！`);
     console.log(`ここは${this.current_place}`);
-    console.log(`
-      [コマンド集]
-      encount(): ポケモンが出現
-      run(): 逃げる
-      capture(): 戦闘中のポケモンを捕まえる
-      move(): 場所を移動する
-      box(): ポケモンボックスを見る(捕まえたポケモンを見れます)
-      download(): ポケモンボックスの中身(捕まえたポケモン)のデータのJSONファイルで保存できます
-      load(ボックスのデータのJSON): ボックスのセーブデータをロードする。download()で保存したボックスデータのJSONファイルの中身のテキストをそのままコピペしてください。
-      help(): ヘルプを表示
-      `)
-
+    this.help();
 
     return;
   }
@@ -266,10 +257,15 @@ class Play{
   //ヘルプ
   help(){
     console.log(`
+      遊び方:
+      以下のコマンドのどれかを入力してエンターを押してください
+
       [コマンド集]
+
       encount(): ポケモンが出現
       run(): 逃げる
       capture(): 戦闘中のポケモンを捕まえる
+      rankaku(2以上の数値): ()の中に入力された数値の数だけポケモンを乱獲できます。
       move(): 場所を移動する
       box(): ポケモンボックスを見る(捕まえたポケモンを見れます)
       download(): ポケモンボックスの中身(捕まえたポケモン)のデータのJSONファイルで保存できます
@@ -372,21 +368,11 @@ class Play{
     }
 
     const places = Object.keys(encount_list_set);//名前リスト
-    /*
-    console.log(`moveに入った`);
-    console.log(`places:${places}`);
-    console.log(`places[0]:${places[0]},places[1]:${places[1]}`);
-    console.log(`tokiwaでforは止まるはず`);
-    */
+
     for(let key of Object.keys(places)){
       let i = Number(key);
       //console.log(`places[${i}]:${places[i]}`);
       if(places[i] === this.current_place){
-        /*
-        console.log(`ifの中に入った`);
-        console.log(`i=${i}でi+1は${i+1},places[i+1]は${places[i+1]}`);
-        console.log(`places[0]は${places[0]}`);
-        */
         this.current_place =(places[i+1]) ? places[i+1]:places[0];
         this.encount_list = encount_list_set[this.current_place];
         console.log(`ここは${this.current_place}`);
@@ -444,44 +430,3 @@ const myPlay = new Play();
 
 
 /*        デバッグエリア         */
-
-
-/*草稿
-Q1.
-In your words In English, please describe how you plan to use Twitter data and/or APIs. The more detailed the response, the easier it is to review and approve.
-A1.
-I'm requesting Twitter Developer Account for exhibiting a game product I'm developing.
-By using Twitter API’s tweet function, I’ll create a Twitter bot which provides the Twitter users with a kind of a text-based game.
-I'm planning to make this game bot have the function to respond to the reply which the player gives to it, and I need the functions of Twitter API to acheive this.
-The main goal for this game bot is to provide the users with entertainment.
-
-Q2.
-Are you planning to analyze Twitter data?
-Please describe how you will analyze Twitter data including any analysis of Tweets or Twitter users.
-
-A2.
-Yes, I’m planning to use Twitter data for analysis.
-Since this game bot progresses by responding to the reply from the users, analyzing Twitter data is a necessity.
-
-Q3.
-Will your app use Tweet, Retweet, like, follow, or Direct Message functionality?
-Please describe your planned use of these features.
-
-A3.
-Yes, I’m planning to use Tweet functionality for the Twitter bot.
-As I described above, the concept of the bot I'm going to make is text-based game.
-Tweet functionality is needed to realize it.
-
-Q4.
-Do you plan to display Tweets or aggregate data about Twitter content outside of Twitter?
-Please describe how and where Tweets and/or data about Twitter content will be displayed outside of Twitter.
-
-A4.
-No.
-Q5.
-Will your product, service or analysis make Twitter content or derived information available to a government entity?
-
-A5.
-No
-
-*/
