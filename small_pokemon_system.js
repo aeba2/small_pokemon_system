@@ -10,22 +10,7 @@
 
 */
 
-
-/*                     ポケモン関連                             */
-
-//個体値をランダムに生成する関数
-const create_indivisual_stats = () => {
-    let arr = [];
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-    }
-    for(let i = 0;i<6;i++){
-      arr.push(getRandomInt(0,31));
-    }
-    return {hp:arr[0], atk:arr[1], def:arr[2], sp_atk:arr[3], sp_def:arr[4], speed:arr[5]};
-}
+/*                      ポケモンボックス                  */
 
 //クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
 //セーブデータからロード機能も付けたい(Playの方か)
@@ -94,6 +79,23 @@ function storageAvailable(type) {
 }
 
 
+
+
+/*                     ポケモン                             */
+
+//個体値をランダムに生成する関数
+const create_indivisual_stats = () => {
+    let arr = [];
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    }
+    for(let i = 0;i<6;i++){
+      arr.push(getRandomInt(0,31));
+    }
+    return {hp:arr[0], atk:arr[1], def:arr[2], sp_atk:arr[3], sp_def:arr[4], speed:arr[5]};
+}
 
 //クラスPokemon:不要？
 class Pokemon{//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
@@ -263,6 +265,8 @@ class Shuckle extends Pokemon{
 }
 
 
+
+
 /*                      エンカウントデータ                     */
 const encount_list_set = {
   tokiwanomori:{
@@ -321,6 +325,7 @@ class Play{
       load(): ボックスのセーブデータをロードする。
       help(): ヘルプを表示
       `)
+      console.log(`セーブ・ロード機能を使う場合は、毎回同じURLのページでプレイしてください。(データの保存にlocalStorageを使っているため)`);
   }
 
   //ポケモンボックスのデータをロード
@@ -419,6 +424,7 @@ class Play{
   }
 
 }
+
 
 /*             プレイヤー向けの簡易コマンドマクロ        */
 //乱獲:引数に指定した数値の回数だけ乱獲する
