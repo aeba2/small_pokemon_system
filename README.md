@@ -7,9 +7,15 @@
 を目標にしています。
 
 ## 進捗状況
-[ポケモン捕獲ゲームの作成] 
+[ポケモン捕獲ゲームの作成] <br>
 JavaScriptを使って、試験ブラウザの開発者ツール(DevTools)上で動くゲームを作りました。
-[遊び方]
- - masterブランチのページへ飛んで、`small_pokemon_system.js`
-
+[遊び方]<br>
+ - masterブランチページの[`small_pokemon_system.js`](https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js)ファイルのページへ行く
+ - ソースコード全体をクリップボードにコピーする
+ - 適当なページでブラウザの開発者ツールを開く
+   - **Chrome:** `Ctrl + Shift + I` または `右クリック -> 「検証」をクリック`
+   - **Internet Explorer:** `F12` または `歯車のアイコン -> 開発者ツール`
+ - aa
+ - 
+ 
 making small pokemon system
