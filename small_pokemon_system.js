@@ -264,6 +264,28 @@ class Shuckle extends Pokemon{
   }
 }
 
+class Shaymin extends Pokemon{
+  constructor(_nickname, _habitat){
+    super();
+
+    //種族固有の値
+    this.name = "シェイミ";
+    this.type = {first:"草",second:""};
+    this.base_stats = {//種族値
+        hp:100,
+        atk:100,
+        def:100,
+        sp_atk:100,
+        sp_def:100,
+        speed:100
+    };
+
+    //個体特有の値
+    this.indivisual_stats = create_indivisual_stats();//個体値
+    this.nickname = (_nickname) ? _nickname: this.name;
+    this.habitat = _habitat;//出現した場所(=つかまえた場所)
+  }
+}
 
 
 
@@ -280,8 +302,9 @@ const encount_list_set = {
   CeladonDepartmentStore:{
     Mew:{class:Mew,encount_rate:1,level:[3,67]}// "event"はイベント戦。
   },
-  hoge:{
-    Shuckle:{class:Shuckle,encount_rate:1,level:[4,5,6]}// "event"はイベント戦。
+  nazonobasho:{
+    Shaymin:{class:Shaymin,encount_rate:0.5,level:[4,5,6]},
+    Shuckle:{class:Shuckle,encount_rate:0.5,level:[4,5,6]}// "event"はイベント戦。
   }
 }
 
