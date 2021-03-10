@@ -325,7 +325,7 @@ const help_message = `
   save(): ポケモンボックスの中身(捕まえたポケモン)のデータのJSONファイルで保存できます
   load(): ボックスのセーブデータをロードする。
   help(): ヘルプを表示
-  
+
   ※セーブ・ロード機能を使う場合は、毎回同じURLのページでプレイしてください。(データの保存にlocalStorageを使っているため)
   `;
 
@@ -343,11 +343,11 @@ class Play{
     this.isOnBattle = false;//いまバトル中か
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
     this.previous_pokemon = undefined;//前回出現したポケモン
-    
+
     this.screen_area = document.getElementById("screen_area");
     this.message_area = document.getElementById("message_area");
     this.console_area = document.getElementById("console_area");
-    
+
     //初期動作
     //this.createText(this.message_area);
     this.createText(`ゲームスタート！`);
@@ -355,15 +355,16 @@ class Play{
 
     return;
   }
-  
+
   createText(txt){
     const newdiv = document.createElement("div");
     newdiv.innerText = txt;
-    this.message_area.appendChild(newdiv);  
+    this.message_area.appendChild(newdiv);
   }
-
+  
   //ヘルプ
   help(){
+    createText(help_message);
   }
 
   //ポケモンボックスのデータをロード
@@ -480,7 +481,7 @@ class No{
 class Console{
   constructor(){
   }
-  
+
 }
 
 
