@@ -25,11 +25,11 @@ class PokeBox{
     if (storageAvailable('localStorage')) {
       localStorage.setItem("pokebox",data);
       //本当はここにもう一つ、ちゃんとセーブできたか確認する判定を入れたい。
-      console.log(`ボックスデータのセーブが完了しました。`);
+      this.createText(`ボックスデータのセーブが完了しました。`);
 
     } else {
-      console.log(`残念ながら、データをセーブ出来ません。`);
-      console.log(`何らかの理由で、データのセーブに必要なlocalStorageが使用できません。
+      this.createText(`残念ながら、データをセーブ出来ません。`);
+      this.createText(`何らかの理由で、データのセーブに必要なlocalStorageが使用できません。
                   以下を試してみてください。
                   ・ブラウザをシークレットモードで見ている場合は通常モードに切り替える
                   ・別のブラウザを使う
@@ -349,9 +349,9 @@ class Play{
     this.console_area = document.getElementById("console_area");
     
     //初期動作
-    //console.log(this.message_area);
-    console.log(`ゲームスタート！`);
-    console.log(`ここは${this.current_place}`);
+    //this.createText(this.message_area);
+    this.createText(`ゲームスタート！`);
+    this.createText(`ここは${this.current_place}`);
 
     return;
   }
@@ -388,14 +388,14 @@ class Play{
 
       if(rand >= oldAcc && rand < newAcc){
         this.current_pokemon = new tmp.class();//出現するポケモンのインスタンスを生成
-        console.log(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
+        this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
         this.isOnBattle = true;
         flg_no_encount = false;
         return;
       }
       oldAcc = newAcc;
     }
-    if(flg_no_encount) console.log(`何も現れなかった`);
+    if(flg_no_encount) this.createText(`何も現れなかった`);
     return;
   }
 
@@ -418,9 +418,9 @@ class Play{
     link.click();
     */
 
-    console.log(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
-    console.log(`捕まえたポケモン:%o`,pokemon_caught);
-    console.log(`現在のボックスの状況:%o`,this.pokebox.contents);
+    this.createText(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
+    this.createText(`捕まえたポケモン:%o`,pokemon_caught);
+    this.createText(`現在のボックスの状況:%o`,this.pokebox.contents);
     this.isOnBattle = false;
     this.previous_pokemon = this.current_pokemon;
     this.current_pokemon = undefined;//クリア
@@ -435,7 +435,7 @@ class Play{
     this.isOnBattle = false;
     this.previous_pokemon = this.current_pokemon;
     this.current_pokemon = undefined;//クリア
-    console.log(`上手く逃げ切れた！`);
+    this.createText(`上手く逃げ切れた！`);
 
     return;
   }
@@ -449,11 +449,11 @@ class Play{
 
     for(let key of Object.keys(places)){
       let i = Number(key);
-      //console.log(`places[${i}]:${places[i]}`);
+      //this.createText(`places[${i}]:${places[i]}`);
       if(places[i] === this.current_place){
         this.current_place =(places[i+1]) ? places[i+1]:places[0];
         this.encount_list = encount_list_set[this.current_place];
-        console.log(`ここは${this.current_place}`);
+        this.createText(`ここは${this.current_place}`);
 
         return;
       }
