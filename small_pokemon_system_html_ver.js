@@ -350,8 +350,8 @@ class Play{
     
     //初期動作
     //console.log(this.message_area);
-    this.createText(`ゲームスタート！`);
-    this.createText(`ここは${this.current_place}`);
+    console.log(`ゲームスタート！`);
+    console.log(`ここは${this.current_place}`);
 
     return;
   }
