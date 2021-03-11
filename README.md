@@ -10,8 +10,8 @@
 皆さんからのご意見、ご感想、ソースコードの改変は随時募集しています。
 
 ## 進捗状況
-### ポケモン捕獲ゲームの作成
-手始めに、JavaScriptを使って、ブラウザの開発者ツール(DevTools)上で動く「[ポケモン捕獲ゲーム]((https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js))」を作成しました。<br>
+### ポケモン捕獲ゲームHTML版の作成
+手始めに、JavaScriptを使って、~~ブラウザの開発者ツール(DevTools)上で動く「[ポケモン捕獲ゲーム]((https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js))」を作成しました。~~ => [HTML版]()を作りました<br>
 ### 遊び方
  - [`small_pokemon_system.js`](https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js)を開く
  - ソースコード全体をクリップボードにコピーする
