@@ -267,7 +267,7 @@ const encount_list_set = {
 //ヘルプメッセージ
 const help_message = `
   遊び方:
-  以下のコマンドのどれかを入力してエンターを押してください
+  以下のコマンドのどれかを選択して押してください。
 
   [コマンド集]
 
@@ -307,6 +307,7 @@ class Play {
     //this.createText(this.message_area);
     this.createText(`ゲームスタート！`);
     this.createText(`ここは${this.current_place}`);
+    this.help();
     this.createButton();
 
     return;
@@ -382,20 +383,8 @@ class Play {
   }
 
   see_pokebox() {
-    /* //簡易ver(ニックネームのみ表示)
-    let msg = `ボックスの中身:`;
-    for(let i = 0;i<this.pokebox.length;i++){
-        msg += this.pokebox[i].nickname;
-        if(!(i === this.pokebox.length - 1)) msg += ", ";
-    }
-    this.createText(msg);
-    */
-
-
     /*
-    本格的ver:
-    全部のポケモンが表示され、クリックすると各情報(種族、ニックネーム、個体値)が出てくる
-
+    ボックス内の全部のポケモンが表示され、クリックすると各情報(種族、ニックネーム、個体値)が出てくる
     */
     const message_area = this.message_area;
     message_area.innerHTML = "<h2>名前をクリックすると詳細表示</h2>";
@@ -407,6 +396,8 @@ class Play {
         message_area.appendChild(info_list);
 
         let flg = true;
+
+        //名前をクリックするとポケモンの情報が表示
         info_list.addEventListener("click",()=>{
           if(flg){
             flg = false;
