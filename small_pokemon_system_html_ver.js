@@ -10,6 +10,8 @@
 
 */
 
+
+
 /*                      ポケモンボックス                  */
 
 //クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
@@ -341,6 +343,9 @@ class Play{
     this.encount_list = encount_list_set[this.current_place];//エンカウントリストオブジェクト.初期値はトキワの森のencount_list_tokiwa。
 
     this.isOnBattle = false;//いまバトル中か
+    this.play_mode = "normal";//"normal":何もしていない,"battle":戦闘状態
+
+
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
     this.previous_pokemon = undefined;//前回出現したポケモン
 
@@ -352,8 +357,47 @@ class Play{
     //this.createText(this.message_area);
     this.createText(`ゲームスタート！`);
     this.createText(`ここは${this.current_place}`);
+    this.createButton();
 
     return;
+  }
+
+  test(){
+    console.log(this);
+    return;
+  }
+
+  createButton(){
+    this.console_area.innerHTML = "";
+    if(this.play_mode === "normal"){
+
+      const commands ={"encount":this.encount,"move":this.move,"see box":this.see_pokebox,"save":this.save,"help":this.help};
+      for(let key of Object.keys(commands)){
+        const method = commands[key].bind(this);
+        const newBtn = document.createElement("button");
+        newBtn.innerText = key;
+        newBtn.addEventListener("click",() => {
+          method();
+        });
+        this.console_area.appendChild(newBtn);
+      }
+    }
+
+    if(this.play_mode === "battle"){
+
+      const commands ={"capture":this.catch,"run":this.run,"help":this.help};
+      for(let key of Object.keys(commands)){
+        const method = commands[key].bind(this);
+        const newBtn = document.createElement("button");
+        newBtn.innerText = key;
+        newBtn.addEventListener("click",() => {
+          method();
+        });
+        this.console_area.appendChild(newBtn);
+      }
+
+    }
+
   }
 
   createText(txt){
@@ -361,15 +405,23 @@ class Play{
     newdiv.innerText = txt;
     this.message_area.appendChild(newdiv);
   }
-  
+
   //ヘルプ
   help(){
-    createText(help_message);
+    this.createText(help_message);
   }
 
+  see_pokebox(){
+    this.createText(this.pokebox.contents);
+  }
   //ポケモンボックスのデータをロード
   load_pokebox(){
         this.pokebox.load();
+  }
+
+  //
+  save(){
+    this.pokebox.save();
   }
 
   //encountメソッド:乱数を生成し、ランダムにポケモンを出現させる
@@ -388,9 +440,13 @@ class Play{
       newAcc += tmp.encount_rate;
 
       if(rand >= oldAcc && rand < newAcc){
+        this.isOnBattle = true;
+        this.play_mode = "battle";
+        this.createButton();
         this.current_pokemon = new tmp.class();//出現するポケモンのインスタンスを生成
         this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
-        this.isOnBattle = true;
+
+
         flg_no_encount = false;
         return;
       }
@@ -422,9 +478,13 @@ class Play{
     this.createText(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
     this.createText(`捕まえたポケモン:%o`,pokemon_caught);
     this.createText(`現在のボックスの状況:%o`,this.pokebox.contents);
-    this.isOnBattle = false;
+
+
     this.previous_pokemon = this.current_pokemon;
     this.current_pokemon = undefined;//クリア
+    this.isOnBattle = false;
+    this.play_mode = "normal";
+    this.createButton();
 
     return;
   }
@@ -433,10 +493,15 @@ class Play{
     if(!this.isOnBattle){
       throw new Error(`いや、ポケモン居らんし…`);
     }
-    this.isOnBattle = false;
+
+    this.createText(`上手く逃げ切れた！`);
+
     this.previous_pokemon = this.current_pokemon;
     this.current_pokemon = undefined;//クリア
-    this.createText(`上手く逃げ切れた！`);
+
+    this.isOnBattle = false;
+    this.play_mode = "normal";
+    this.createButton();
 
     return;
   }
