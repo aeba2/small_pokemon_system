@@ -11,8 +11,14 @@
 
 ## 進捗状況
 ### ポケモン捕獲ゲームHTML版の作成
-手始めに、JavaScriptを使って、~~ブラウザの開発者ツール(DevTools)上で動く「[ポケモン捕獲ゲーム]((https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js))」を作成しました。~~ => [HTML版]()を作りました<br>
+手始めに、JavaScriptを使って、~~ブラウザの開発者ツール(DevTools)上で動く「[ポケモン捕獲ゲーム]((https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js))」を作成しました。~~ => [HTML版](https://jsfiddle.net/aeba2/m8nbztew/1/)を作りました<br>
 ### 遊び方
+ (HTML版)<br>
+ - [ココ](https://jsfiddle.net/aeba2/m8nbztew/1/)(jsfiddle)をクリック
+ - 画面左上の`Run` をクリック
+ - 右下のゲーム画面の指示に従ってプレイ
+
+ (DevTools版)<br>
  - [`small_pokemon_system.js`](https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js)を開く
  - ソースコード全体をクリップボードにコピーする
  - 適当なページでブラウザの開発者ツールを開く
