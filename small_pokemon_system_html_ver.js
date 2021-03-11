@@ -404,11 +404,11 @@ class Play {
         const info_list = document.createElement("div");
         info_list.innerText = pokemon.nickname;
 
-        const open_info = function(){
+        const open_info = ()=>{
           for(let key of Object.keys(pokemon)){
               const info_item = document.createElement("div");
 
-              const txt = key + ":" + pokemon[key];
+              const txt = key + ":" + JSON.stringify(pokemon[key]);
               info_item.innerText = txt;
 
 
@@ -416,7 +416,7 @@ class Play {
               info_list.appendChild(info_item);
           }
           //二度追加しないflgは必要
-        }.bind(this);//Playと結びつける
+        };//Playと結びつけるためにアロー関数にした
 
         info_list.addEventListener("click",open_info);
         message_area.appendChild(info_list);
