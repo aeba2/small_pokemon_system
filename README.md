@@ -18,6 +18,8 @@
  - 画面左上の`Run` をクリック
  - 右下のゲーム画面の指示に従ってプレイ
 
+[ソースコード](https://github.com/aeba2/small_pokemon_system/tree/pokeboxMerge/htmlver)
+
  (DevTools版)<br>
  - [`small_pokemon_system.js`](https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js)を開く
  - ソースコード全体をクリップボードにコピーする
