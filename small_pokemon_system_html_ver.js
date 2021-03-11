@@ -11,73 +11,28 @@
 */
 
 
-
-/*                      ポケモンボックス                  */
-
-//クラス PokeBox:ポケモンボックスのクラス。捕まえたポケモンを保存する。
-//セーブデータからロード機能も付けたい(Playの方か)
-class PokeBox{
-  constructor(){
-    this.contents = [];
-  }
-
-  save(){//ボックスにいるポケモンのデータをダウンロード(jsonファイル)
-    const data = JSON.stringify(this.contents);
-    // 利用例
-    if (storageAvailable('localStorage')) {
-      localStorage.setItem("pokebox",data);
-      //本当はここにもう一つ、ちゃんとセーブできたか確認する判定を入れたい。
-      this.createText(`ボックスデータのセーブが完了しました。`);
-
-    } else {
-      this.createText(`残念ながら、データをセーブ出来ません。`);
-      this.createText(`何らかの理由で、データのセーブに必要なlocalStorageが使用できません。
-                  以下を試してみてください。
-                  ・ブラウザをシークレットモードで見ている場合は通常モードに切り替える
-                  ・別のブラウザを使う
-
-                  `);
-        // 残念ながら localStorage は使用できません
-    }
-
-
-    /*
-    const blob =  new Blob([data], {type: 'application\/json'})
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `PokeBox.json`;
-    link.click();
-    */
-  }
-
-  load(){
-    const data = localStorage.getItem("pokebox");
-    this.contents = JSON.parse(data);
-  }
-}
-
 //データのセーブに必要なlocalstorageをサポートしているか判定する関数
 function storageAvailable(type) {
-    try {
-        var storage = window[type],
-            x = '__storage_test__';
-        storage.setItem(x, x);
-        storage.removeItem(x);
-        return true;
-    } catch(e) {
-        return e instanceof DOMException && (
-            // everything except Firefox
-            e.code === 22 ||
-            // Firefox
-            e.code === 1014 ||
-            // test name field too, because code might not be present
-            // everything except Firefox
-            e.name === 'QuotaExceededError' ||
-            // Firefox
-            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-            // acknowledge QuotaExceededError only if there's something already stored
-            storage.length !== 0;
-    }
+  try {
+    var storage = window[type],
+      x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return e instanceof DOMException && (
+      // everything except Firefox
+      e.code === 22 ||
+      // Firefox
+      e.code === 1014 ||
+      // test name field too, because code might not be present
+      // everything except Firefox
+      e.name === 'QuotaExceededError' ||
+      // Firefox
+      e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage.length !== 0;
+  }
 }
 
 
@@ -87,204 +42,204 @@ function storageAvailable(type) {
 
 //個体値をランダムに生成する関数
 const create_indivisual_stats = () => {
-    let arr = [];
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-    }
-    for(let i = 0;i<6;i++){
-      arr.push(getRandomInt(0,31));
-    }
-    return {hp:arr[0], atk:arr[1], def:arr[2], sp_atk:arr[3], sp_def:arr[4], speed:arr[5]};
+  let arr = [];
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+  }
+  for (let i = 0; i < 6; i++) {
+    arr.push(getRandomInt(0, 31));
+  }
+  return { hp: arr[0], atk: arr[1], def: arr[2], sp_atk: arr[3], sp_def: arr[4], speed: arr[5] };
 }
 
 //クラスPokemon:不要？
-class Pokemon{//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
-  constructor(){
+class Pokemon {//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
+  constructor() {
   }
 }
 //クラスPikachu:ピカチュウのクラス
-class Pikachu extends Pokemon{
-  constructor(_nickname, _habitat){
+class Pikachu extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "ピカチュウ";
-    this.type = {first:"電気",second:""};
+    this.type = { first: "電気", second: "" };
     this.base_stats = {//種族値
-        hp:35,
-        atk:55,
-        def:40,
-        sp_atk:50,
-        sp_def:50,
-        speed:90
+      hp: 35,
+      atk: 55,
+      def: 40,
+      sp_atk: 50,
+      sp_def: 50,
+      speed: 90
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 //クラスCaterpie:キャタピーのクラス
-class Caterpie extends Pokemon{
-  constructor(_nickname, _habitat){
+class Caterpie extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "キャタピー";
-    this.type = {first:"虫",second:""};
+    this.type = { first: "虫", second: "" };
     this.base_stats = {//種族値
-        hp:1,
-        atk:1,
-        def:1,
-        sp_atk:1,
-        sp_def:1,
-        speed:1
+      hp: 1,
+      atk: 1,
+      def: 1,
+      sp_atk: 1,
+      sp_def: 1,
+      speed: 1
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 //クラスMetapod:トランセルのクラス
-class Metapod extends Pokemon{
-  constructor(_nickname, _habitat){
+class Metapod extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "トランセル";
-    this.type = {first:"虫",second:""};
+    this.type = { first: "虫", second: "" };
     this.base_stats = {//種族値
-        hp:1,
-        atk:1,
-        def:100,
-        sp_atk:1,
-        sp_def:50,
-        speed:1
+      hp: 1,
+      atk: 1,
+      def: 100,
+      sp_atk: 1,
+      sp_def: 50,
+      speed: 1
     }
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 //クラスWeedle:ビードルのクラス
-class Weedle extends Pokemon{
-  constructor(_nickname, _habitat){
+class Weedle extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "ビードル";
-    this.type = {first:"虫",second:"毒"};
+    this.type = { first: "虫", second: "毒" };
     this.base_stats = {//種族値
-        hp:1,
-        atk:1,
-        def:1,
-        sp_atk:1,
-        sp_def:1,
-        speed:1
+      hp: 1,
+      atk: 1,
+      def: 1,
+      sp_atk: 1,
+      sp_def: 1,
+      speed: 1
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 //クラスKakuna:コクーンのクラス
-class Kakuna extends Pokemon{
-  constructor(_nickname, _habitat){
+class Kakuna extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "コクーン";
-    this.type = {first:"虫",second:"毒"};
+    this.type = { first: "虫", second: "毒" };
     this.base_stats = {//種族値
-        hp:1,
-        atk:1,
-        def:100,
-        sp_atk:1,
-        sp_def:50,
-        speed:1
+      hp: 1,
+      atk: 1,
+      def: 100,
+      sp_atk: 1,
+      sp_def: 50,
+      speed: 1
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 //クラスMew:ミュウのクラス
-class Mew extends Pokemon{
-  constructor(_nickname, _habitat){
+class Mew extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "ミュウ";
-    this.type = {first:"エスパー",second:""};
+    this.type = { first: "エスパー", second: "" };
     this.base_stats = {//種族値
-        hp:100,
-        atk:100,
-        def:100,
-        sp_atk:100,
-        sp_def:100,
-        speed:100
+      hp: 100,
+      atk: 100,
+      def: 100,
+      sp_atk: 100,
+      sp_def: 100,
+      speed: 100
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 //クラスShuckle:ツボツボのクラス
-class Shuckle extends Pokemon{
-  constructor(_nickname, _habitat){
+class Shuckle extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "ツボツボ";
-    this.type = {first:"虫",second:"岩"};
+    this.type = { first: "虫", second: "岩" };
     this.base_stats = {//種族値
-        hp:20,
-        atk:10,
-        def:230,
-        sp_atk:10,
-        sp_def:230,
-        speed:5
+      hp: 20,
+      atk: 10,
+      def: 230,
+      sp_atk: 10,
+      sp_def: 230,
+      speed: 5
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
 
-class Shaymin extends Pokemon{
-  constructor(_nickname, _habitat){
+class Shaymin extends Pokemon {
+  constructor(_nickname, _habitat) {
     super();
 
     //種族固有の値
     this.name = "シェイミ";
-    this.type = {first:"草",second:""};
+    this.type = { first: "草", second: "" };
     this.base_stats = {//種族値
-        hp:100,
-        atk:100,
-        def:100,
-        sp_atk:100,
-        sp_def:100,
-        speed:100
+      hp: 100,
+      atk: 100,
+      def: 100,
+      sp_atk: 100,
+      sp_def: 100,
+      speed: 100
     };
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname: this.name;
+    this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
 }
@@ -293,20 +248,20 @@ class Shaymin extends Pokemon{
 
 /*                      エンカウントデータ                     */
 const encount_list_set = {
-  tokiwanomori:{
+  tokiwanomori: {
     //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
-      Pikachu:{class:Pikachu,encount_rate:0.04,level:[3,5]},
-      Caterpie:{class:Caterpie,encount_rate:0.3,level:[3,4,5]},
-      Metapod:{class:Metapod,encount_rate:0.18,level:[4,5,6]},
-      Weedle:{class:Weedle,encount_rate:0.3,level:[3,4,5]},
-      Kakuna:{class:Kakuna,encount_rate:0.18,level:[4,5,6]}
+    Pikachu: { class: Pikachu, encount_rate: 0.04, level: [3, 5] },
+    Caterpie: { class: Caterpie, encount_rate: 0.3, level: [3, 4, 5] },
+    Metapod: { class: Metapod, encount_rate: 0.18, level: [4, 5, 6] },
+    Weedle: { class: Weedle, encount_rate: 0.3, level: [3, 4, 5] },
+    Kakuna: { class: Kakuna, encount_rate: 0.18, level: [4, 5, 6] }
   },
-  CeladonDepartmentStore:{
-    Mew:{class:Mew,encount_rate:1,level:[3,67]}// "event"はイベント戦。
+  CeladonDepartmentStore: {
+    Mew: { class: Mew, encount_rate: 1, level: [3, 67] }// "event"はイベント戦。
   },
-  nazonobasho:{
-    Shaymin:{class:Shaymin,encount_rate:0.5,level:[4,5,6]},
-    Shuckle:{class:Shuckle,encount_rate:0.5,level:[4,5,6]}// "event"はイベント戦。
+  nazonobasho: {
+    Shaymin: { class: Shaymin, encount_rate: 0.5, level: [4, 5, 6] },
+    Shuckle: { class: Shuckle, encount_rate: 0.5, level: [4, 5, 6] }// "event"はイベント戦。
   }
 }
 
@@ -335,9 +290,9 @@ const help_message = `
 
 
 //Playクラス:ここにゲームの機能やプレイメモリが全て詰まっている。ゲームマスター的な。
-class Play{
-  constructor(){
-    this.pokebox = new PokeBox();
+class Play {
+  constructor() {
+    this.pokebox = [];
 
     this.current_place = Object.keys(encount_list_set)[0];//現在の場所の名前.初期値はトキワの森:"tokiwanomori"
     this.encount_list = encount_list_set[this.current_place];//エンカウントリストオブジェクト.初期値はトキワの森のencount_list_tokiwa。
@@ -362,35 +317,35 @@ class Play{
     return;
   }
 
-  test(){
+  test() {
     console.log(this);
     return;
   }
 
-  createButton(){
+  createButton() {
     this.console_area.innerHTML = "";
-    if(this.play_mode === "normal"){
+    if (this.play_mode === "normal") {
 
-      const commands ={"encount":this.encount,"move":this.move,"see box":this.see_pokebox,"save":this.save,"help":this.help};
-      for(let key of Object.keys(commands)){
+      const commands = { "encount": this.encount, "move": this.move, "see box": this.see_pokebox, "save": this.save, "help": this.help };
+      for (let key of Object.keys(commands)) {
         const method = commands[key].bind(this);
         const newBtn = document.createElement("button");
         newBtn.innerText = key;
-        newBtn.addEventListener("click",() => {
+        newBtn.addEventListener("click", () => {
           method();
         });
         this.console_area.appendChild(newBtn);
       }
     }
 
-    if(this.play_mode === "battle"){
+    if (this.play_mode === "battle") {
 
-      const commands ={"capture":this.catch,"run":this.run,"help":this.help};
-      for(let key of Object.keys(commands)){
+      const commands = { "capture": this.catch, "run": this.run, "help": this.help };
+      for (let key of Object.keys(commands)) {
         const method = commands[key].bind(this);
         const newBtn = document.createElement("button");
         newBtn.innerText = key;
-        newBtn.addEventListener("click",() => {
+        newBtn.addEventListener("click", () => {
           method();
         });
         this.console_area.appendChild(newBtn);
@@ -400,46 +355,69 @@ class Play{
 
   }
 
-  createText(txt){
+  createText(txt) {
+    const wrapper = this.message_area;//メッセージエリア
+
+    if(wrapper.childNodes.length == 10){
+      wrapper.removeChild(wrapper.firstChild);
+    }//メッセージは10個まで
+
+    //メッセージボックスを追加
     const newdiv = document.createElement("div");
     newdiv.innerText = txt;
-    this.message_area.appendChild(newdiv);
+    wrapper.appendChild(newdiv);
   }
 
   //ヘルプ
-  help(){
+  help() {
     this.createText(help_message);
   }
 
-  see_pokebox(){
-    this.createText(this.pokebox.contents);
+  see_pokebox() {
+    this.createText(this.pokebox);
   }
   //ポケモンボックスのデータをロード
-  load_pokebox(){
-        this.pokebox.load();
+  load_pokebox() {
+    const data = localStorage.getItem("pokebox");
+    this.pokebox = JSON.parse(data);
   }
 
   //
-  save(){
-    this.pokebox.save();
+  save() {
+    const data = JSON.stringify(this.pokebox);
+    // 利用例
+    if (storageAvailable('localStorage')) {
+      localStorage.setItem("pokebox", data);
+      //本当はここにもう一つ、ちゃんとセーブできたか確認する判定を入れたい。
+      this.createText(`ボックスデータのセーブが完了しました。`);
+
+    } else {
+      this.createText(`残念ながら、データをセーブ出来ません。`);
+      this.createText(`何らかの理由で、データのセーブに必要なlocalStorageが使用できません。
+                  以下を試してみてください。
+                  ・ブラウザをシークレットモードで見ている場合は通常モードに切り替える
+                  ・別のブラウザを使う
+
+                  `);
+    }
   }
 
   //encountメソッド:乱数を生成し、ランダムにポケモンを出現させる
-  encount(){
-    if(this.isOnBattle){
+  encount() {
+    if (this.isOnBattle) {
       throw new Error(`戦闘中です。まずは目の前のポケモンに集中して、捕まえるなり逃げるなりしてください(一度に一匹しか出ません)`);
     }
 
     const rand = Math.random();//0~1の乱数を生成
-    let newAcc = 0,oldAcc = 0;
+    let newAcc = 0, oldAcc = 0;
     let flg_no_encount = true;//出現フラグ(エラーハンドリング用): true:ポケモンが出現しない、false:ポケモンが出現する
 
     //出た乱数(rand)に相当するエンカウントリストのメンバー(出現するポケモン)を選び出すためのfor文。
-    for(let member of Object.keys(this.encount_list)){
+    for (let member of Object.keys(this.encount_list)) {
       const tmp = this.encount_list[member];
       newAcc += tmp.encount_rate;
 
-      if(rand >= oldAcc && rand < newAcc){
+      if (rand >= oldAcc && rand < newAcc) {
         this.isOnBattle = true;
         this.play_mode = "battle";
         this.createButton();
@@ -452,19 +430,19 @@ class Play{
       }
       oldAcc = newAcc;
     }
-    if(flg_no_encount) this.createText(`何も現れなかった`);
+    if (flg_no_encount) this.createText(`何も現れなかった`);
     return;
   }
 
-  catch(){
-    if(!this.isOnBattle){
+  catch() {
+    if (!this.isOnBattle) {
       throw new Error(`いや、ポケモン居らんし…`);
     }
 
     const pokemon_caught = this.current_pokemon;
 
     //プレイヤーのポケモンボックスにポケモンを収納
-    this.pokebox.contents.push(pokemon_caught);
+    this.pokebox.push(pokemon_caught);
 
     /*くどいので消すかも
     //捕まえたポケモンのオブジェクトをjsonファイルにしてダウンロード
@@ -476,8 +454,12 @@ class Play{
     */
 
     this.createText(`やったー！${pokemon_caught.name}を捕まえたぞ！`);
-    this.createText(`捕まえたポケモン:%o`,pokemon_caught);
-    this.createText(`現在のボックスの状況:%o`,this.pokebox.contents);
+    let msg = `捕まえたポケモンの個体値:`;
+    for(let key of Object.keys(pokemon_caught.indivisual_stats)){
+      msg += `${key}:${pokemon_caught.indivisual_stats[key]} `;
+    }
+    this.createText(msg);
+  //  this.createText(`現在のボックスの状況:${this.pokebox}`);
 
 
     this.previous_pokemon = this.current_pokemon;
@@ -489,8 +471,8 @@ class Play{
     return;
   }
 
-  run(){
-    if(!this.isOnBattle){
+  run() {
+    if (!this.isOnBattle) {
       throw new Error(`いや、ポケモン居らんし…`);
     }
 
@@ -506,18 +488,18 @@ class Play{
     return;
   }
 
-  move(){
-    if(this.isOnBattle){
+  move() {
+    if (this.isOnBattle) {
       throw new Error(`戦闘中です。捕まえるなり逃げるなりしてください。`);
     }
 
     const places = Object.keys(encount_list_set);//名前リスト
 
-    for(let key of Object.keys(places)){
+    for (let key of Object.keys(places)) {
       let i = Number(key);
       //this.createText(`places[${i}]:${places[i]}`);
-      if(places[i] === this.current_place){
-        this.current_place =(places[i+1]) ? places[i+1]:places[0];
+      if (places[i] === this.current_place) {
+        this.current_place = (places[i + 1]) ? places[i + 1] : places[0];
         this.encount_list = encount_list_set[this.current_place];
         this.createText(`ここは${this.current_place}`);
 
@@ -530,21 +512,21 @@ class Play{
 }
 
 //Yesクラス:ここに
-class Yes{
-  constructor(){
+class Yes {
+  constructor() {
   }
 }
 
 //Noクラス:ここに
-class No{
-  constructor(){
+class No {
+  constructor() {
   }
 }
 
 
 /*             プレイヤーのコンソール       */
-class Console{
-  constructor(){
+class Console {
+  constructor() {
   }
 
 }
