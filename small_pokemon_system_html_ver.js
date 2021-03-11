@@ -36,8 +36,6 @@ function storageAvailable(type) {
 }
 
 
-
-
 /*                     ポケモン                             */
 
 //個体値をランダムに生成する関数
@@ -287,8 +285,6 @@ const help_message = `
   `;
 
 /*                      プレイ                              */
-
-
 //Playクラス:ここにゲームの機能やプレイメモリが全て詰まっている。ゲームマスター的な。
 class Play {
   constructor() {
@@ -322,13 +318,23 @@ class Play {
     return;
   }
 
+  //コマンドを実行するボタンを作成する
   createButton() {
+    //コンソールエリアの内部を初期化
     this.console_area.innerHTML = "";
-    if (this.play_mode === "normal") {
 
+    //"normal"モードの場合
+    if (this.play_mode === "normal") {
+      //必要なコマンドの関数を取ってきてオブジェクトに詰め込む
       const commands = { "encount": this.encount, "move": this.move, "see box": this.see_pokebox, "save": this.save, "help": this.help };
       for (let key of Object.keys(commands)) {
+
+        // commands[key]だけだと、ただ各コマンドの関数そのものが渡されるだけなので、
+        //各コマンドの関数内部に書かれているthisが行き場を失ってしまう
+        //だから、bindをつかって、指定してやる必要がある
         const method = commands[key].bind(this);
+
+        //HTMLのbuttonエレメントを作って、イベントハンドラを定義し、コンソールエリアに追加
         const newBtn = document.createElement("button");
         newBtn.innerText = key;
         newBtn.addEventListener("click", () => {
@@ -340,7 +346,7 @@ class Play {
 
     if (this.play_mode === "battle") {
 
-      const commands = { "capture": this.catch, "run": this.run, "help": this.help };
+      const commands = { "capture": this.capture, "run": this.run, "help": this.help };
       for (let key of Object.keys(commands)) {
         const method = commands[key].bind(this);
         const newBtn = document.createElement("button");
@@ -356,11 +362,12 @@ class Play {
   }
 
   createText(txt) {
-    const wrapper = this.message_area;//メッセージエリア
+    const wrapper = this.message_area;//メッセージエリアを取得
 
-    if(wrapper.childNodes.length == 10){
+    //メッセージの数は10個まで。それ以上増えたら古い順に削除。
+    if(wrapper.childNodes.length === 10){
       wrapper.removeChild(wrapper.firstChild);
-    }//メッセージは10個まで
+    }
 
     //メッセージボックスを追加
     const newdiv = document.createElement("div");
@@ -374,7 +381,48 @@ class Play {
   }
 
   see_pokebox() {
-    this.createText(this.pokebox);
+    /* //簡易ver(ニックネームのみ表示)
+    let msg = `ボックスの中身:`;
+    for(let i = 0;i<this.pokebox.length;i++){
+        msg += this.pokebox[i].nickname;
+        if(!(i === this.pokebox.length - 1)) msg += ", ";
+    }
+    this.createText(msg);
+    */
+
+
+    /*
+    本格的ver:
+    全部のポケモンが表示され、クリックすると各情報(種族、ニックネーム、個体値)が出てくる
+
+    */
+    const message_area = this.message_area;
+    message_area.innerHTML = "";
+    for(let i=0;i<this.pokebox.length;i++){
+        const pokemon = this.pokebox[i];
+
+        const info_list = document.createElement("div");
+        info_list.innerText = pokemon.nickname;
+
+        const open_info = function(){
+          for(let key of Object.keys(pokemon)){
+              const info_item = document.createElement("div");
+
+              const txt = key + ":" + pokemon[key];
+              info_item.innerText = txt;
+
+
+              //インフォリストに追加
+              info_list.appendChild(info_item);
+          }
+          //二度追加しないflgは必要
+        }.bind(this);//Playと結びつける
+
+        info_list.addEventListener("click",open_info);
+        message_area.appendChild(info_list);
+    }
+
+
   }
   //ポケモンボックスのデータをロード
   load_pokebox() {
@@ -434,7 +482,7 @@ class Play {
     return;
   }
 
-  catch() {
+  capture() {
     if (!this.isOnBattle) {
       throw new Error(`いや、ポケモン居らんし…`);
     }
@@ -510,28 +558,6 @@ class Play {
   }
 
 }
-
-//Yesクラス:ここに
-class Yes {
-  constructor() {
-  }
-}
-
-//Noクラス:ここに
-class No {
-  constructor() {
-  }
-}
-
-
-/*             プレイヤーのコンソール       */
-class Console {
-  constructor() {
-  }
-
-}
-
-
 
 
 /*                       ゲームスタート                      */
