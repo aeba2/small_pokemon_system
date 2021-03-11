@@ -1,6 +1,12 @@
-const obj = {name:1};
-const obj2 = {name:2}; 
-const div = document.createElement("div");
-const f =function(){console.log(this)}.bind(obj);
+const p = document.createElement("div");
+p.innerText = "hi";
+const c1 = document.createElement("div");
+const c2 = document.createElement("div");
+p.appendChild(c1);
+p.appendChild(c2);
 
-f();
+console.log(p);
+
+p.removeChild(p.firstChild);
+p.removeChild(p.firstChild);
+console.log(p);

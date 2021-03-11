@@ -271,15 +271,14 @@ const help_message = `
 
   [コマンド集]
 
-  encount(): ポケモンが出現
-  run(): 逃げる
-  capture(): 戦闘中のポケモンを捕まえる
-  rankaku(2以上の数値): ()の中に入力された数値の数だけポケモンを乱獲できます。
-  move(): 場所を移動する
-  box(): ポケモンボックスを見る(捕まえたポケモンを見れます)
-  save(): ポケモンボックスの中身(捕まえたポケモン)のデータのJSONファイルで保存できます
-  load(): ボックスのセーブデータをロードする。
-  help(): ヘルプを表示
+  encount: ポケモンが出現
+  run: 逃げる
+  capture: 戦闘中のポケモンを捕まえる
+  move: 場所を移動する
+  see box: ポケモンボックスを見る(捕まえたポケモンを見れます)
+  save: ポケモンボックスの中身をlocalStorageに保存する
+  load: ボックスのセーブデータをロードする
+  help: ヘルプを表示
 
   ※セーブ・ロード機能を使う場合は、毎回同じURLのページでプレイしてください。(データの保存にlocalStorageを使っているため)
   `;
@@ -326,7 +325,7 @@ class Play {
     //"normal"モードの場合
     if (this.play_mode === "normal") {
       //必要なコマンドの関数を取ってきてオブジェクトに詰め込む
-      const commands = { "encount": this.encount, "move": this.move, "see box": this.see_pokebox, "save": this.save, "help": this.help };
+      const commands = { "encount": this.encount, "move": this.move, "see box": this.see_pokebox, "save": this.save, "help": this.help, "load":this.load_pokebox };
       for (let key of Object.keys(commands)) {
 
         // commands[key]だけだと、ただ各コマンドの関数そのものが渡されるだけなので、
@@ -365,8 +364,10 @@ class Play {
     const wrapper = this.message_area;//メッセージエリアを取得
 
     //メッセージの数は10個まで。それ以上増えたら古い順に削除。
-    if(wrapper.childNodes.length === 10){
-      wrapper.removeChild(wrapper.firstChild);
+    if(wrapper.childNodes.length >= 10){
+      while(!(wrapper.childNodes.length === 10)){
+        wrapper.removeChild(wrapper.firstChild);
+      }
     }
 
     //メッセージボックスを追加
@@ -397,37 +398,60 @@ class Play {
 
     */
     const message_area = this.message_area;
-    message_area.innerHTML = "";
+    message_area.innerHTML = "<h2>名前をクリックすると詳細表示</h2>";
+
     for(let i=0;i<this.pokebox.length;i++){
         const pokemon = this.pokebox[i];
-
         const info_list = document.createElement("div");
-        info_list.innerText = pokemon.nickname;
-
-        const open_info = ()=>{
-          for(let key of Object.keys(pokemon)){
-              const info_item = document.createElement("div");
-
-              const txt = key + ":" + JSON.stringify(pokemon[key]);
-              info_item.innerText = txt;
-
-
-              //インフォリストに追加
-              info_list.appendChild(info_item);
-          }
-          //二度追加しないflgは必要
-        };//Playと結びつけるためにアロー関数にした
-
-        info_list.addEventListener("click",open_info);
+        info_list.innerText = pokemon.nickname;//innerTextも子ノードであることに注意
         message_area.appendChild(info_list);
+
+        let flg = true;
+        info_list.addEventListener("click",()=>{
+          if(flg){
+            flg = false;
+            for(let key of Object.keys(pokemon)){
+                const info_item = document.createElement("div");
+
+                const txt = key + ":" + JSON.stringify(pokemon[key]);
+                info_item.innerText = txt;
+
+                //インフォリストに追加
+                info_list.appendChild(info_item);
+            }
+          }else{
+            flg = true;
+            info_list.innerHTML = "";
+            info_list.innerText = pokemon.nickname;
+          }
+        });//クリックすると情報を表示
     }
 
 
   }
   //ポケモンボックスのデータをロード
   load_pokebox() {
-    const data = localStorage.getItem("pokebox");
-    this.pokebox = JSON.parse(data);
+
+
+    if (storageAvailable('localStorage')) {
+
+      if(localStorage.getItem("pokebox")){
+        const data = localStorage.getItem("pokebox");
+        this.pokebox = JSON.parse(data);
+        this.createText(`ボックスデータのロードが完了しました。`);
+        this.see_pokebox();
+
+      }else{
+        createText(`ボックスデータが存在しません。`);
+        createText(`前回のセーブデータをロードするには以下の条件が必要です:
+          ・前回セーブした時と同じブラウザを使っていること
+          ・ブラウザのURLが前回セーブしたURLと一致していること
+          `);
+      }
+
+    } else {
+      this.createText(`残念ながら、localStorageを読み込めません。`);
+    }
   }
 
   //
