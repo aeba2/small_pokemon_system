@@ -188,6 +188,7 @@ class Mew extends Pokemon {
       sp_def: 100,
       speed: 100
     };
+    this.img = "https://i.imgur.com/0fanZUd.jpg";
 
     //個体特有の値
     this.indivisual_stats = create_indivisual_stats();//個体値
@@ -294,7 +295,8 @@ class Play {
 
     this.isOnBattle = false;//いまバトル中か
     this.play_mode = "normal";//"normal":何もしていない,"battle":戦闘状態
-
+    //this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
+    this.music = new Audio("game_maoudamashii_4_field09.mp3");
 
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
     this.previous_pokemon = undefined;//前回出現したポケモン
@@ -309,13 +311,19 @@ class Play {
     this.createText(`ここは${this.current_place}`);
     this.help();
     this.createButton();
+    //setTimeout(this.music.play,1000);
+    //this.music.play();
+    this.audio_first.call(this);
+
 
     return;
   }
 
-  test() {
-    console.log(this);
-    return;
+  audio_first(){
+    //console.log(this)
+    const playBtn = document.body.appendChild(document.createElement("button"));
+    playBtn.value = "BGM";
+    playBtn.addEventListener("click",this.music.play);
   }
 
   //コマンドを実行するボタンを作成する
@@ -486,6 +494,7 @@ class Play {
         this.createButton();
         this.current_pokemon = new tmp.class();//出現するポケモンのインスタンスを生成
         this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
+        this.set_img_encount(this.current_pokemon.img);
 
 
         flg_no_encount = false;
@@ -496,6 +505,21 @@ class Play {
     if (flg_no_encount) this.createText(`何も現れなかった`);
     return;
   }
+
+  set_img_encount(_src){
+    if(!_src) return;
+
+    const img = document.createElement("img");
+    img.src = _src;
+    img.alt = this.current_pokemon.name;
+    this.screen_area.appendChild(img);
+  }
+
+  clear_img_encount(){
+    this.screen_area.innerHTML = "";
+  }
+
+
 
   capture() {
     if (!this.isOnBattle) {
@@ -526,7 +550,8 @@ class Play {
 
 
     this.previous_pokemon = this.current_pokemon;
-    this.current_pokemon = undefined;//クリア
+    this.current_pokemon = undefined;
+    this.clear_img_encount();
     this.isOnBattle = false;
     this.play_mode = "normal";
     this.createButton();
@@ -543,7 +568,7 @@ class Play {
 
     this.previous_pokemon = this.current_pokemon;
     this.current_pokemon = undefined;//クリア
-
+    this.clear_img_encount();
     this.isOnBattle = false;
     this.play_mode = "normal";
     this.createButton();
