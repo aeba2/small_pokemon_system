@@ -296,7 +296,7 @@ class Play {
     this.isOnBattle = false;//いまバトル中か
     this.play_mode = "normal";//"normal":何もしていない,"battle":戦闘状態
     //this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
-    this.music = new Audio("game_maoudamashii_4_field09.mp3");
+    this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
 
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
     this.previous_pokemon = undefined;//前回出現したポケモン
@@ -306,24 +306,30 @@ class Play {
     this.console_area = document.getElementById("console_area");
 
     //初期動作
-    //this.createText(this.message_area);
-    this.createText(`ゲームスタート！`);
-    this.createText(`ここは${this.current_place}`);
-    this.help();
-    this.createButton();
-    //setTimeout(this.music.play,1000);
-    //this.music.play();
-    this.audio_first.call(this);
-
+    this.start();
 
     return;
   }
 
-  audio_first(){
-    //console.log(this)
-    const playBtn = document.body.appendChild(document.createElement("button"));
-    playBtn.value = "BGM";
-    playBtn.addEventListener("click",this.music.play);
+  start(){
+    const startBtn = document.createElement("div");
+    startBtn.innerText = "click to start!";
+    startBtn.id = "audioBtn";
+    startBtn.addEventListener('click', () => {
+        document.getElementById("audioBtn").innerText = "音楽をミュート";
+        this.music.play();
+        this.createText(`ゲームスタート！`);
+        this.createText(`ここは${this.current_place}`);
+        this.help();
+        this.createButton();
+
+    });
+    document.body.appendChild(startBtn);
+
+  }
+
+  manage_audio(){
+
   }
 
   //コマンドを実行するボタンを作成する
