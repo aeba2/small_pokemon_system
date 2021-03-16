@@ -13,11 +13,11 @@ JavaScript + HTML で作ったポケモン捕獲ゲームです。
 ### プレイ方法:
  - [ココ](https://jsfiddle.net/aeba2/m8nbztew/1/)(jsfiddle)をクリック
  - 右下のゲーム画面の指示に従ってプレイ
- ※[ソースコードはこちら](https://github.com/aeba2/small_pokemon_system/tree/pokeboxMerge/htmlver)
+ ※[ソースコードはこちら](https://github.com/aeba2/small_pokemon_system/tree/main/htmlver)
  
  (DevTools版)<br>
  ※あまり面白くない上プレイが面倒くさいので、上のHTMLをお勧めしますが、興味のある人はどうぞ:
- -> [`small_pokemon_system.js`](https://github.com/aeba2/small_pokemon_system/blob/master/small_pokemon_system.js)
+ -> [`small_pokemon_system.js`](https://github.com/aeba2/small_pokemon_system/tree/console_ver/small_pokemon_system.js)
 ## 進捗状況
 ### 音楽再生機能を追加しました。
  
