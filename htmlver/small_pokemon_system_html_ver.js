@@ -193,17 +193,14 @@ class Play {
     startBtn.innerText = "click to start!";
     startBtn.id = "startBtn";
     startBtn.addEventListener('click', () => {
-        this.music.play();
+
         this.createText(`ゲームスタート！`);
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
+        this.manage_audio();
 
-        const audioBtn = document.createElement("div");
-        audioBtn.innerText = "音楽を停止";
-        audioBtn.id = "audioBtn";
-        audioBtn.addEventListener("click",this.manage_audio.bind(this));
-        document.getElementById("console_area").appendChild(audioBtn);
+
 
         document.getElementById("startBtn").remove();
     });
@@ -212,9 +209,17 @@ class Play {
   }
 
   manage_audio(){
+    //音声制御ボタンがなければ作成
     if(!document.getElementById("audioBtn")){
+      const audioBtn = document.createElement("div");
+      audioBtn.innerText = "音楽を停止";
+      audioBtn.id = "audioBtn";
+      console.log(this)
+      audioBtn.addEventListener("click",this.manage_audio.bind(this));
+      document.getElementById("console_area").appendChild(audioBtn);
     }
-
+    //console.log(this)
+    //再生の停止・再開
     if(this.music.paused){
       this.music.play();
       document.getElementById("audioBtn").innerText = "音楽を停止";
