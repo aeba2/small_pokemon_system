@@ -53,7 +53,7 @@ const shuzoku_master = {
     },
     img:"https://i.imgur.com/0fanZUd.jpg"
   },
-  
+
   Shuckle:{
     no:220,
     name:"ツボツボ",
@@ -68,7 +68,7 @@ const shuzoku_master = {
     },
     img:"https://i.imgur.com/0fanZUd.jpg"
   },
-  
+
   Shaymin:{
     no:351,
     name:"シェイミ",
@@ -99,11 +99,11 @@ class Pokemon{
     this.indivisual_stats = this.create_indivisual_stats();//個体値
     this.level = _level;//レベル
     this.status = {};
-    
+
     this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
-  
+
   create_indivisual_stats(){
      let arr = [];
      function getRandomInt(min, max) {
@@ -191,24 +191,43 @@ class Play {
   start(){
     const startBtn = document.createElement("div");
     startBtn.innerText = "click to start!";
-    startBtn.id = "audioBtn";
+    startBtn.id = "startBtn";
     startBtn.addEventListener('click', () => {
-        
-        document.getElementById("audioBtn").innerText = "音楽をミュート";
-        this.music.play();
-        console.log(this.music);
+
         this.createText(`ゲームスタート！`);
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
+        this.manage_audio();
 
+
+
+        document.getElementById("startBtn").remove();
     });
     document.body.appendChild(startBtn);
 
   }
 
   manage_audio(){
-    document.getElementById("audioBtn").pause();
+    //音声制御ボタンがなければ作成
+    if(!document.getElementById("audioBtn")){
+      const audioBtn = document.createElement("div");
+      audioBtn.innerText = "音楽を停止";
+      audioBtn.id = "audioBtn";
+      console.log(this)
+      audioBtn.addEventListener("click",this.manage_audio.bind(this));
+      document.getElementById("console_area").appendChild(audioBtn);
+    }
+    //console.log(this)
+    //再生の停止・再開
+    if(this.music.paused){
+      this.music.play();
+      document.getElementById("audioBtn").innerText = "音楽を停止";
+    }else{
+      this.music.pause();
+      document.getElementById("audioBtn").innerText = "音楽を再生";
+    }
+
   }
 
   //コマンドを実行するボタンを作成する
