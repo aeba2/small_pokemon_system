@@ -37,230 +37,107 @@ function storageAvailable(type) {
 
 
 /*                     ポケモン                             */
-
-//個体値をランダムに生成する関数
-const create_indivisual_stats = () => {
-  let arr = [];
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-  }
-  for (let i = 0; i < 6; i++) {
-    arr.push(getRandomInt(0, 31));
-  }
-  return { hp: arr[0], atk: arr[1], def: arr[2], sp_atk: arr[3], sp_def: arr[4], speed: arr[5] };
-}
-
-//クラスPokemon:不要？
-class Pokemon {//ポケモンの種族によらず、先に定義しておくべき普遍的なプロパティやメソッドは何かあるか？
-  constructor() {
-  }
-}
-//クラスPikachu:ピカチュウのクラス
-class Pikachu extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "ピカチュウ";
-    this.type = { first: "電気", second: "" };
-    this.base_stats = {//種族値
-      hp: 35,
-      atk: 55,
-      def: 40,
-      sp_atk: 50,
-      sp_def: 50,
-      speed: 90
-    };
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-//クラスCaterpie:キャタピーのクラス
-class Caterpie extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "キャタピー";
-    this.type = { first: "虫", second: "" };
-    this.base_stats = {//種族値
-      hp: 1,
-      atk: 1,
-      def: 1,
-      sp_atk: 1,
-      sp_def: 1,
-      speed: 1
-    };
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-//クラスMetapod:トランセルのクラス
-class Metapod extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "トランセル";
-    this.type = { first: "虫", second: "" };
-    this.base_stats = {//種族値
-      hp: 1,
-      atk: 1,
-      def: 100,
-      sp_atk: 1,
-      sp_def: 50,
-      speed: 1
-    }
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-//クラスWeedle:ビードルのクラス
-class Weedle extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "ビードル";
-    this.type = { first: "虫", second: "毒" };
-    this.base_stats = {//種族値
-      hp: 1,
-      atk: 1,
-      def: 1,
-      sp_atk: 1,
-      sp_def: 1,
-      speed: 1
-    };
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-//クラスKakuna:コクーンのクラス
-class Kakuna extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "コクーン";
-    this.type = { first: "虫", second: "毒" };
-    this.base_stats = {//種族値
-      hp: 1,
-      atk: 1,
-      def: 100,
-      sp_atk: 1,
-      sp_def: 50,
-      speed: 1
-    };
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-//クラスMew:ミュウのクラス
-class Mew extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "ミュウ";
-    this.type = { first: "エスパー", second: "" };
-    this.base_stats = {//種族値
+//種族のmasterデータ
+const shuzoku_master = {
+  Mew:{
+    no:151,
+    name:"ミュウ",
+    type:{ first: "エスパー", second: "" },
+    base_stats:{//種族値
       hp: 100,
       atk: 100,
       def: 100,
       sp_atk: 100,
       sp_def: 100,
       speed: 100
-    };
-    this.img = "https://i.imgur.com/0fanZUd.jpg";
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-//クラスShuckle:ツボツボのクラス
-class Shuckle extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "ツボツボ";
-    this.type = { first: "虫", second: "岩" };
-    this.base_stats = {//種族値
-      hp: 20,
-      atk: 10,
+    },
+    img:"https://i.imgur.com/0fanZUd.jpg"
+  },
+  
+  Shuckle:{
+    no:220,
+    name:"ツボツボ",
+    type:{ first: "虫", second: "岩" },
+    base_stats:{//種族値
+      hp: 100,
+      atk: 20,
       def: 230,
-      sp_atk: 10,
+      sp_atk: 20,
       sp_def: 230,
       speed: 5
-    };
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
-  }
-}
-
-class Shaymin extends Pokemon {
-  constructor(_nickname, _habitat) {
-    super();
-
-    //種族固有の値
-    this.name = "シェイミ";
-    this.type = { first: "草", second: "" };
-    this.base_stats = {//種族値
+    },
+    img:"https://i.imgur.com/0fanZUd.jpg"
+  },
+  
+  Shaymin:{
+    no:351,
+    name:"シェイミ",
+    type:{ first: "草", second: "" },
+    base_stats:{//種族値
       hp: 100,
       atk: 100,
       def: 100,
       sp_atk: 100,
       sp_def: 100,
       speed: 100
-    };
-
-    //個体特有の値
-    this.indivisual_stats = create_indivisual_stats();//個体値
-    this.nickname = (_nickname) ? _nickname : this.name;
-    this.habitat = _habitat;//出現した場所(=つかまえた場所)
+    },
+    img:"https://i.imgur.com/0fanZUd.jpg"
   }
 }
 
+//クラスPokemon
+class Pokemon{
+  constructor(_name, _level, _nickname, _habitat){
+    //種族固有の値
+    this.no = shuzoku_master[_name].no;
+    this.name = shuzoku_master[_name].name;
+    this.type = shuzoku_master[_name].type;
+    this.base_stats = shuzoku_master[_name].base_stats;
+    this.img = shuzoku_master[_name].img;
+
+    //個体特有の値
+    this.indivisual_stats = this.create_indivisual_stats();//個体値
+    this.level = _level;//レベル
+    this.status = {};
+    
+    this.nickname = (_nickname) ? _nickname : this.name;
+    this.habitat = _habitat;//出現した場所(=つかまえた場所)
+  }
+  
+  create_indivisual_stats(){
+     let arr = [];
+     function getRandomInt(min, max) {
+       min = Math.ceil(min);
+       max = Math.floor(max);
+       return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+     }
+     for (let i = 0; i < 6; i++) {
+       arr.push(getRandomInt(0, 31));
+     }
+     return { hp: arr[0], atk: arr[1], def: arr[2], sp_atk: arr[3], sp_def: arr[4], speed: arr[5] };
+   }
+
+}
 
 
 /*                      エンカウントデータ                     */
 const encount_list_set = {
+  /*
   tokiwanomori: {
     //ポケモン名:{出現率:整数値,レベル:[出現するポケモンのレベル]}
-    Pikachu: { class: Pikachu, encount_rate: 0.04, level: [3, 5] },
-    Caterpie: { class: Caterpie, encount_rate: 0.3, level: [3, 4, 5] },
-    Metapod: { class: Metapod, encount_rate: 0.18, level: [4, 5, 6] },
-    Weedle: { class: Weedle, encount_rate: 0.3, level: [3, 4, 5] },
-    Kakuna: { class: Kakuna, encount_rate: 0.18, level: [4, 5, 6] }
+    Pikachu: {encount_rate: 0.04, level: [3, 5] },
+    Caterpie: {encount_rate: 0.3, level: [3, 4, 5] },
+    Metapod: {encount_rate: 0.18, level: [4, 5, 6] },
+    Weedle: {encount_rate: 0.3, level: [3, 4, 5] },
+    Kakuna: {encount_rate: 0.18, level: [4, 5, 6] }
   },
+  */
   CeladonDepartmentStore: {
-    Mew: { class: Mew, encount_rate: 1, level: [3, 67] }// "event"はイベント戦。
+    Mew: {encount_rate: 1, level: [3, 67] }// "event"はイベント戦。
   },
   nazonobasho: {
-    Shaymin: { class: Shaymin, encount_rate: 0.5, level: [4, 5, 6] },
-    Shuckle: { class: Shuckle, encount_rate: 0.5, level: [4, 5, 6] }// "event"はイベント戦。
+    Shaymin: {encount_rate: 0.5, level: [4, 5, 6] },
+    Shuckle: {encount_rate: 0.5, level: [4, 5, 6] }// "event"はイベント戦。
   }
 }
 
@@ -316,8 +193,10 @@ class Play {
     startBtn.innerText = "click to start!";
     startBtn.id = "audioBtn";
     startBtn.addEventListener('click', () => {
+        
         document.getElementById("audioBtn").innerText = "音楽をミュート";
         this.music.play();
+        console.log(this.music);
         this.createText(`ゲームスタート！`);
         this.createText(`ここは${this.current_place}`);
         this.help();
@@ -329,7 +208,7 @@ class Play {
   }
 
   manage_audio(){
-
+    document.getElementById("audioBtn").pause();
   }
 
   //コマンドを実行するボタンを作成する
@@ -498,7 +377,7 @@ class Play {
         this.isOnBattle = true;
         this.play_mode = "battle";
         this.createButton();
-        this.current_pokemon = new tmp.class();//出現するポケモンのインスタンスを生成
+        this.current_pokemon = new Pokemon(member);//出現するポケモンのインスタンスを生成
         this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
         this.set_img_encount(this.current_pokemon.img);
 
