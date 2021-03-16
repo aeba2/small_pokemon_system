@@ -194,11 +194,17 @@ class Play {
     startBtn.id = "startBtn";
     startBtn.addEventListener('click', () => {
         this.music.play();
-        console.log(this.music);
         this.createText(`ゲームスタート！`);
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
+
+        const audioBtn = document.createElement("div");
+        audioBtn.innerText = "音楽を停止";
+        audioBtn.id = "audioBtn";
+        audioBtn.addEventListener("click",this.manage_audio.bind(this));
+        document.getElementById("console_area").appendChild(audioBtn);
+
         document.getElementById("startBtn").remove();
     });
     document.body.appendChild(startBtn);
@@ -206,7 +212,17 @@ class Play {
   }
 
   manage_audio(){
-    this.music();
+    if(!document.getElementById("audioBtn")){
+    }
+
+    if(this.music.paused){
+      this.music.play();
+      document.getElementById("audioBtn").innerText = "音楽を停止";
+    }else{
+      this.music.pause();
+      document.getElementById("audioBtn").innerText = "音楽を再生";
+    }
+
   }
 
   //コマンドを実行するボタンを作成する
