@@ -53,7 +53,7 @@ const shuzoku_master = {
     },
     img:"https://i.imgur.com/0fanZUd.jpg"
   },
-  
+
   Shuckle:{
     no:220,
     name:"ツボツボ",
@@ -68,7 +68,7 @@ const shuzoku_master = {
     },
     img:"https://i.imgur.com/0fanZUd.jpg"
   },
-  
+
   Shaymin:{
     no:351,
     name:"シェイミ",
@@ -99,11 +99,11 @@ class Pokemon{
     this.indivisual_stats = this.create_indivisual_stats();//個体値
     this.level = _level;//レベル
     this.status = {};
-    
+
     this.nickname = (_nickname) ? _nickname : this.name;
     this.habitat = _habitat;//出現した場所(=つかまえた場所)
   }
-  
+
   create_indivisual_stats(){
      let arr = [];
      function getRandomInt(min, max) {
@@ -191,24 +191,22 @@ class Play {
   start(){
     const startBtn = document.createElement("div");
     startBtn.innerText = "click to start!";
-    startBtn.id = "audioBtn";
+    startBtn.id = "startBtn";
     startBtn.addEventListener('click', () => {
-        
-        document.getElementById("audioBtn").innerText = "音楽をミュート";
         this.music.play();
         console.log(this.music);
         this.createText(`ゲームスタート！`);
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
-
+        document.getElementById("startBtn").remove();
     });
     document.body.appendChild(startBtn);
 
   }
 
   manage_audio(){
-    document.getElementById("audioBtn").pause();
+    this.music();
   }
 
   //コマンドを実行するボタンを作成する
