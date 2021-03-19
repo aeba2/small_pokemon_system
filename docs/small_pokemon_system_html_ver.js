@@ -39,7 +39,8 @@ function storageAvailable(type) {
 const soundtrack = {
 //  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
   "field":"https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A",
-  "yasei":"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5"
+  "yasei":"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5",
+  "Lugia":"https://drive.google.com/uc?id=1STprKvzU_7g-Lm3hWT60g3GZpRpY0wFv"
 }
 
 /*                     ポケモン                             */
@@ -88,6 +89,21 @@ const shuzoku_master = {
       speed: 100
     },
     img:"https://drive.google.com/uc?id=1R5BIpqjR-ErOzcdWrZHylR1l5opEn39t" //"https://sp3.raky.net/poke/icon96/n492.gif"
+  },
+  
+  Lugia:{
+    no:249,
+    name:"ルギア",
+    type:{ first: "エスパー", second: "飛行" },
+    base_stats:{//種族値
+      hp: 100,
+      atk: 100,
+      def: 100,
+      sp_atk: 100,
+      sp_def: 100,
+      speed: 100
+    },
+    img:"https://sp3.raky.net/poke/icon96/n249.gif" //"https://sp3.raky.net/poke/icon96/n492.gif"
   }
 }
 
@@ -139,7 +155,8 @@ const encount_list_set = {
   },
   */
   CeladonDepartmentStore: {
-    Mew: {encount_rate: 1, level: [3, 67] }// "event"はイベント戦。
+    Mew: {encount_rate: 0.9, level: [3, 67] },// "event"はイベント戦。
+    Lugia: {encount_rate: 0.1, level: [3, 67] }
   },
   nazonobasho: {
     Shaymin: {encount_rate: 0.5, level: [4, 5, 6] },
@@ -246,6 +263,9 @@ class Play {
   }
 
   music_change(_track){
+    
+    if(_track === "yasei" && this.current_pokemon === "Lugia") _track = "Lugia";
+    
     this.music.src = soundtrack[_track];
     this.music.play();
   }
@@ -562,6 +582,9 @@ class Play {
 
 const myPlay = new Play();
 
+const myEncount;
+
+const myBattle;
 
 
 /*        デバッグエリア         */
