@@ -13,7 +13,7 @@ JavaScript + HTML で作ったポケモン捕獲ゲームです。
 ### プレイ方法:
  - [ココ](https://aeba2.github.io/small_pokemon_system/)をクリック
  - ゲーム画面の指示に従ってプレイ
- 
+ ※まだ試験段階なので、登場するポケモンはミュウとシェイミとツボツボのみです(そのうち追加していきます)
  ※[ソースコードはこちら](https://github.com/aeba2/small_pokemon_system/tree/main/htmlver)
  
  (DevTools版)<br>
