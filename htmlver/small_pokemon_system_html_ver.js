@@ -208,6 +208,8 @@ class Play {
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
+        this.music.play();
+        this.add_audio_console();
 
 
 
@@ -217,17 +219,21 @@ class Play {
 
   }
 
-  manage_audio(){
+  add_audio_console(){
     //音声制御ボタンがなければ作成
     if(!document.getElementById("audioBtn")){
-      const audioBtn = document.createElement("div");
-      audioBtn.innerText = "音楽を停止";
+      const audioBtn = document.createElement("button");
+      audioBtn.innerText = (!this.music.paused) ? "音楽を停止":"音楽を再生";
       audioBtn.id = "audioBtn";
-      console.log(this)
-      audioBtn.addEventListener("click",this.manage_audio.bind(this));
+      //console.log(this)
+      audioBtn.addEventListener("click",this.play_pause.bind(this));
       document.getElementById("console_area").appendChild(audioBtn);
+      //this.music.play();
     }
-    //console.log(this)
+
+  }
+
+  play_pause(){
     //再生の停止・再開
     if(this.music.paused){
       this.music.play();
@@ -246,7 +252,6 @@ class Play {
 
   //コマンドを実行するボタンを作成する
   createButton() {
-
 
     //コンソールエリアの内部を初期化
     this.console_area.innerHTML = "";
@@ -288,7 +293,7 @@ class Play {
     }
 
 
-    this.manage_audio();
+    //this.add_audio_console();
 
   }
 
@@ -423,6 +428,8 @@ class Play {
       throw new Error(`戦闘中です。まずは目の前のポケモンに集中して、捕まえるなり逃げるなりしてください(一度に一匹しか出ません)`);
     }
 
+    console.log(this.music.paused);
+
     const rand = Math.random();//0~1の乱数を生成
     let newAcc = 0, oldAcc = 0;
     let flg_no_encount = true;//出現フラグ(エラーハンドリング用): true:ポケモンが出現しない、false:ポケモンが出現する
@@ -436,10 +443,13 @@ class Play {
         this.isOnBattle = true;
         this.play_mode = "battle";
         this.createButton();
+        console.log(this.music.paused);
         this.current_pokemon = new Pokemon(member);//出現するポケモンのインスタンスを生成
         this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
         this.set_img_encount(this.current_pokemon.img);
         this.music_change("yasei");
+        this.add_audio_console();
+        console.log(this.music.paused);
 
         flg_no_encount = false;
         return;
@@ -500,6 +510,7 @@ class Play {
     this.play_mode = "normal";
     this.createButton();
     this.music_change("field");
+    this.add_audio_console();
 
     return;
   }
@@ -518,6 +529,7 @@ class Play {
     this.play_mode = "normal";
     this.createButton();
     this.music_change("field");
+    this.add_audio_console();
 
     return;
   }
