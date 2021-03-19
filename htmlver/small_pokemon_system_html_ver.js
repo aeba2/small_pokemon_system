@@ -246,6 +246,8 @@ class Play {
 
   //コマンドを実行するボタンを作成する
   createButton() {
+
+
     //コンソールエリアの内部を初期化
     this.console_area.innerHTML = "";
 
@@ -285,13 +287,33 @@ class Play {
 
     }
 
+
     this.manage_audio();
 
   }
 
-  createText(txt) {
+  //1st引数:メッセージのテキスト、2nd引数:特別長いメッセージの時はtrueを渡す
+  createText(_txt,_special_message) {
     const wrapper = this.message_area;//メッセージエリアを取得
 
+    //特別長いメッセージのとき(helpなど)
+    if(_special_message){
+      wrapper.innerHTML = "";
+      //メッセージボックスを追加
+      const newMsg = document.createElement("div");
+      newMsg.innerText = _txt;
+      wrapper.appendChild(newMsg);
+
+      while(!(wrapper.childNodes.length === 10)){
+        //console.log("i'm in while");
+        const empty = document.createElement("div");
+        wrapper.appendChild(empty);
+      }
+      return;
+    }
+
+    //普段は高さを固定
+    wrapper.style.height = "400";
     //メッセージの数は10個まで。それ以上増えたら古い順に削除。
     if(wrapper.childNodes.length >= 10){
       while(!(wrapper.childNodes.length === 10)){
@@ -300,14 +322,15 @@ class Play {
     }
 
     //メッセージボックスを追加
-    const newdiv = document.createElement("div");
-    newdiv.innerText = txt;
-    wrapper.appendChild(newdiv);
+    const newMsg = document.createElement("div");
+    newMsg.innerText = _txt;
+    wrapper.appendChild(newMsg);
   }
 
   //ヘルプ
   help() {
-    this.createText(help_message);
+    this.message_area.style.height = "auto";
+    this.createText(help_message,true);
   }
 
   see_pokebox() {
@@ -315,7 +338,8 @@ class Play {
     ボックス内の全部のポケモンが表示され、クリックすると各情報(種族、ニックネーム、個体値)が出てくる
     */
     const message_area = this.message_area;
-    message_area.innerHTML = "<h2>名前をクリックすると詳細表示</h2>";
+    message_area.style.height = "auto";
+    message_area.innerHTML = "名前をクリックすると詳細表示";
 
     for(let i=0;i<this.pokebox.length;i++){
         const pokemon = this.pokebox[i];
