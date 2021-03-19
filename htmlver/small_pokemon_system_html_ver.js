@@ -207,7 +207,6 @@ class Play {
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
-        this.manage_audio();
 
 
 
@@ -284,6 +283,8 @@ class Play {
       }
 
     }
+
+    this.manage_audio();
 
   }
 
