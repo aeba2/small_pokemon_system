@@ -36,6 +36,11 @@ function storageAvailable(type) {
 }
 
 
+const soundtrack = {
+  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
+  "yasei":"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5"
+}
+
 /*                     ポケモン                             */
 //種族のmasterデータ
 const shuzoku_master = {
@@ -173,6 +178,10 @@ class Play {
     this.isOnBattle = false;//いまバトル中か
     this.play_mode = "normal";//"normal":何もしていない,"battle":戦闘状態
     //this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
+    /*
+      Google drive上のファイルへの直リンクの書き方:
+      -> https://drive.google.com/uc?id=ファイルID
+    */
     this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
 
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
@@ -228,6 +237,11 @@ class Play {
       document.getElementById("audioBtn").innerText = "音楽を再生";
     }
 
+  }
+
+  music_change(_track){
+    this.music.src = soundtrack[_track];
+    this.music.play();
   }
 
   //コマンドを実行するボタンを作成する
@@ -399,7 +413,7 @@ class Play {
         this.current_pokemon = new Pokemon(member);//出現するポケモンのインスタンスを生成
         this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
         this.set_img_encount(this.current_pokemon.img);
-
+        this.music_change("yasei");
 
         flg_no_encount = false;
         return;
@@ -459,6 +473,7 @@ class Play {
     this.isOnBattle = false;
     this.play_mode = "normal";
     this.createButton();
+    this.music_change("field");
 
     return;
   }
@@ -476,6 +491,7 @@ class Play {
     this.isOnBattle = false;
     this.play_mode = "normal";
     this.createButton();
+    this.music_change("field");
 
     return;
   }
