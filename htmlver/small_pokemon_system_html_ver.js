@@ -582,9 +582,9 @@ class Play {
 
 const myPlay = new Play();
 
-const myEncount;
+//const myEncount;
 
-const myBattle;
+//const myBattle;
 
 
 /*        デバッグエリア         */
