@@ -87,7 +87,7 @@ const shuzoku_master = {
       sp_def: 100,
       speed: 100
     },
-    img:"https://sp3.raky.net/poke/icon96/n492.gif"
+    img:"https://drive.google.com/uc?id=1R5BIpqjR-ErOzcdWrZHylR1l5opEn39t" //"https://sp3.raky.net/poke/icon96/n492.gif"
   }
 }
 
