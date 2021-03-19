@@ -11,7 +11,7 @@
 ## ポケモン捕獲ゲーム(HTML版)
 JavaScript + HTML で作ったポケモン捕獲ゲームです。
 ### プレイ方法:
- - [ココ](https://aeba2.github.io/small_pokemon_system/)(https://aeba2.github.io/small_pokemon_system/)をクリック
+ - [ココ](https://aeba2.github.io/small_pokemon_system/)をクリック
  - ゲーム画面の指示に従ってプレイ
  
  ※[ソースコードはこちら](https://github.com/aeba2/small_pokemon_system/tree/main/htmlver)
