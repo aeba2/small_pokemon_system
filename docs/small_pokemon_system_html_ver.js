@@ -37,7 +37,8 @@ function storageAvailable(type) {
 
 
 const soundtrack = {
-  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
+//  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
+  "field":"https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A",
   "yasei":"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5"
 }
 
@@ -71,7 +72,7 @@ const shuzoku_master = {
       sp_def: 230,
       speed: 5
     },
-    img:"https://i.imgur.com/0fanZUd.jpg"
+    img:"https://sp3.raky.net/poke/icon96/n213.gif"
   },
 
   Shaymin:{
@@ -86,7 +87,7 @@ const shuzoku_master = {
       sp_def: 100,
       speed: 100
     },
-    img:"https://i.imgur.com/0fanZUd.jpg"
+    img:"https://sp3.raky.net/poke/icon96/n492.gif"
   }
 }
 
@@ -182,8 +183,8 @@ class Play {
       Google drive上のファイルへの直リンクの書き方:
       -> https://drive.google.com/uc?id=ファイルID
     */
-    this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
-
+    //this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
+    this.music = new Audio("https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A");
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
     this.previous_pokemon = undefined;//前回出現したポケモン
 
@@ -207,6 +208,8 @@ class Play {
         this.createText(`ここは${this.current_place}`);
         this.help();
         this.createButton();
+        this.music.play();
+        this.add_audio_console();
 
 
 
@@ -216,17 +219,21 @@ class Play {
 
   }
 
-  manage_audio(){
+  add_audio_console(){
     //音声制御ボタンがなければ作成
     if(!document.getElementById("audioBtn")){
-      const audioBtn = document.createElement("div");
-      audioBtn.innerText = "音楽を停止";
+      const audioBtn = document.createElement("button");
+      audioBtn.innerText = (!this.music.paused) ? "音楽を停止":"音楽を再生";
       audioBtn.id = "audioBtn";
-      console.log(this)
-      audioBtn.addEventListener("click",this.manage_audio.bind(this));
+      //console.log(this)
+      audioBtn.addEventListener("click",this.play_pause.bind(this));
       document.getElementById("console_area").appendChild(audioBtn);
+      //this.music.play();
     }
-    //console.log(this)
+
+  }
+
+  play_pause(){
     //再生の停止・再開
     if(this.music.paused){
       this.music.play();
@@ -245,6 +252,7 @@ class Play {
 
   //コマンドを実行するボタンを作成する
   createButton() {
+
     //コンソールエリアの内部を初期化
     this.console_area.innerHTML = "";
 
@@ -284,13 +292,33 @@ class Play {
 
     }
 
-    this.manage_audio();
+
+    //this.add_audio_console();
 
   }
 
-  createText(txt) {
+  //1st引数:メッセージのテキスト、2nd引数:特別長いメッセージの時はtrueを渡す
+  createText(_txt,_special_message) {
     const wrapper = this.message_area;//メッセージエリアを取得
 
+    //特別長いメッセージのとき(helpなど)
+    if(_special_message){
+      wrapper.innerHTML = "";
+      //メッセージボックスを追加
+      const newMsg = document.createElement("div");
+      newMsg.innerText = _txt;
+      wrapper.appendChild(newMsg);
+
+      while(!(wrapper.childNodes.length === 10)){
+        //console.log("i'm in while");
+        const empty = document.createElement("div");
+        wrapper.appendChild(empty);
+      }
+      return;
+    }
+
+    //普段は高さを固定
+    wrapper.style.height = "400";
     //メッセージの数は10個まで。それ以上増えたら古い順に削除。
     if(wrapper.childNodes.length >= 10){
       while(!(wrapper.childNodes.length === 10)){
@@ -299,14 +327,15 @@ class Play {
     }
 
     //メッセージボックスを追加
-    const newdiv = document.createElement("div");
-    newdiv.innerText = txt;
-    wrapper.appendChild(newdiv);
+    const newMsg = document.createElement("div");
+    newMsg.innerText = _txt;
+    wrapper.appendChild(newMsg);
   }
 
   //ヘルプ
   help() {
-    this.createText(help_message);
+    this.message_area.style.height = "auto";
+    this.createText(help_message,true);
   }
 
   see_pokebox() {
@@ -314,7 +343,8 @@ class Play {
     ボックス内の全部のポケモンが表示され、クリックすると各情報(種族、ニックネーム、個体値)が出てくる
     */
     const message_area = this.message_area;
-    message_area.innerHTML = "<h2>名前をクリックすると詳細表示</h2>";
+    message_area.style.height = "auto";
+    message_area.innerHTML = "名前をクリックすると詳細表示";
 
     for(let i=0;i<this.pokebox.length;i++){
         const pokemon = this.pokebox[i];
@@ -398,6 +428,8 @@ class Play {
       throw new Error(`戦闘中です。まずは目の前のポケモンに集中して、捕まえるなり逃げるなりしてください(一度に一匹しか出ません)`);
     }
 
+    console.log(this.music.paused);
+
     const rand = Math.random();//0~1の乱数を生成
     let newAcc = 0, oldAcc = 0;
     let flg_no_encount = true;//出現フラグ(エラーハンドリング用): true:ポケモンが出現しない、false:ポケモンが出現する
@@ -411,10 +443,13 @@ class Play {
         this.isOnBattle = true;
         this.play_mode = "battle";
         this.createButton();
+        console.log(this.music.paused);
         this.current_pokemon = new Pokemon(member);//出現するポケモンのインスタンスを生成
         this.createText(`野生の${this.current_pokemon.name}が飛び出して来たぞ！`);
         this.set_img_encount(this.current_pokemon.img);
         this.music_change("yasei");
+        this.add_audio_console();
+        console.log(this.music.paused);
 
         flg_no_encount = false;
         return;
@@ -475,6 +510,7 @@ class Play {
     this.play_mode = "normal";
     this.createButton();
     this.music_change("field");
+    this.add_audio_console();
 
     return;
   }
@@ -493,6 +529,7 @@ class Play {
     this.play_mode = "normal";
     this.createButton();
     this.music_change("field");
+    this.add_audio_console();
 
     return;
   }
