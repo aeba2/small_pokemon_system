@@ -37,7 +37,8 @@ function storageAvailable(type) {
 
 
 const soundtrack = {
-  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
+//  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
+  "field":"https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A",
   "yasei":"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5"
 }
 
@@ -71,7 +72,7 @@ const shuzoku_master = {
       sp_def: 230,
       speed: 5
     },
-    img:"https://i.imgur.com/0fanZUd.jpg"
+    img:"https://sp3.raky.net/poke/icon96/n213.gif"
   },
 
   Shaymin:{
@@ -86,7 +87,7 @@ const shuzoku_master = {
       sp_def: 100,
       speed: 100
     },
-    img:"https://i.imgur.com/0fanZUd.jpg"
+    img:"https://sp3.raky.net/poke/icon96/n492.gif"
   }
 }
 
@@ -182,8 +183,8 @@ class Play {
       Google drive上のファイルへの直リンクの書き方:
       -> https://drive.google.com/uc?id=ファイルID
     */
-    this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
-
+    //this.music = new Audio("https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3");
+    this.music = new Audio("https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A");
     this.current_pokemon = undefined;//最後に出現したポケモンのインスタンス
     this.previous_pokemon = undefined;//前回出現したポケモン
 
