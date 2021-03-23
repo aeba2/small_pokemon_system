@@ -38,10 +38,10 @@ function storageAvailable(type) {
 
 const soundtrack = {
 //  "field":"https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_4_field09.mp3",
-  "field":"https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A",
-  "yasei":"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5",
-  "Lugia":"https://drive.google.com/uc?id=1STprKvzU_7g-Lm3hWT60g3GZpRpY0wFv",
-  "Houou":"https://drive.google.com/uc?id=1n7T-CpyAL1_rEfbBlJVA6Jr1PMDYO7Ou"
+  "field":"soundtrack/field.mp3",//"https://drive.google.com/uc?id=1XdDHyX9Sc3jA0QElwfJL3QJiC6KBNa0A",
+  "yasei":"soundtrack/yasei_ss.mid.mp3",//"https://drive.google.com/uc?id=16yT2gxAkKihEL3PeY0mbpbSDW42wzmU5",
+  "Lugia":"soundtrack/Lugia.mp3",//"https://drive.google.com/uc?id=1STprKvzU_7g-Lm3hWT60g3GZpRpY0wFv",
+  "Houou":"soundtrack/houou.mid.mp3"//"https://drive.google.com/uc?id=1n7T-CpyAL1_rEfbBlJVA6Jr1PMDYO7Ou"
 }
 
 /*                     ポケモン                             */
